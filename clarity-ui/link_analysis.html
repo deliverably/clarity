@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Deliverably | Link Analysis Dashboard</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-container": "#fffbff",
+              "on-error-container": "#93000a",
+              "background": "#f9f9ff",
+              "tertiary": "#004d70",
+              "on-tertiary-fixed": "#001e2f",
+              "on-surface": "#111c2d",
+              "secondary-fixed-dim": "#ddb8ff",
+              "on-primary": "#ffffff",
+              "error-container": "#ffdad6",
+              "on-primary-container": "#d7d8ff",
+              "on-secondary": "#ffffff",
+              "primary-fixed-dim": "#bec2ff",
+              "secondary-container": "#9e41f5",
+              "outline-variant": "#c7c4d8",
+              "on-secondary-fixed-variant": "#6800b4",
+              "outline": "#777587",
+              "on-tertiary-fixed-variant": "#004c6e",
+              "surface-dim": "#cfdaf2",
+              "inverse-primary": "#bec2ff",
+              "surface": "#f9f9ff",
+              "error": "#ba1a1a",
+              "on-background": "#111c2d",
+              "surface-bright": "#f9f9ff",
+              "on-primary-fixed": "#00026c",
+              "on-tertiary": "#ffffff",
+              "on-secondary-fixed": "#2c0051",
+              "on-tertiary-container": "#b8e0ff",
+              "tertiary-fixed": "#c9e6ff",
+              "on-error": "#ffffff",
+              "surface-container-highest": "#d8e3fb",
+              "secondary-fixed": "#f0dbff",
+              "secondary": "#831ada",
+              "primary-fixed": "#e0e0ff",
+              "tertiary-container": "#006693",
+              "inverse-on-surface": "#ecf1ff",
+              "surface-variant": "#d8e3fb",
+              "surface-tint": "#3e49e2",
+              "inverse-surface": "#263143",
+              "surface-container": "#e7eeff",
+              "primary": "#232ccc",
+              "surface-container-high": "#dee8ff",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-low": "#f0f3ff",
+              "on-surface-variant": "#464555",
+              "on-primary-fixed-variant": "#202aca",
+              "tertiary-fixed-dim": "#89ceff",
+              "primary-container": "#404be3"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background font-body text-on-surface">
+<!-- SideNavBar (Authority Source: JSON) -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-slate-50 border-r border-slate-200 flex flex-col z-50">
+<div class="px-6 py-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">send</span>
+</div>
+<div>
+<h1 class="text-lg font-extrabold text-indigo-600 tracking-tight">Deliverably</h1>
+<p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Premium SaaS</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1 overflow-y-auto no-scrollbar">
+<!-- Dashboard -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50/30 transition-all rounded-xl" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<!-- Validably -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50/30 transition-all rounded-xl" href="#">
+<span class="material-symbols-outlined">verified_user</span>
+<span class="text-sm font-medium">Validably</span>
+</a>
+<!-- Radar -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50/30 transition-all rounded-xl" href="#">
+<span class="material-symbols-outlined">radar</span>
+<span class="text-sm font-medium">Radar</span>
+</a>
+<!-- Spam Check -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50/30 transition-all rounded-xl" href="#">
+<span class="material-symbols-outlined">mark_email_unread</span>
+<span class="text-sm font-medium">Spam Check</span>
+</a>
+<!-- Previews -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50/30 transition-all rounded-xl" href="#">
+<span class="material-symbols-outlined">visibility</span>
+<span class="text-sm font-medium">Previews</span>
+</a>
+<!-- Grammar -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50/30 transition-all rounded-xl" href="#">
+<span class="material-symbols-outlined">spellcheck</span>
+<span class="text-sm font-medium">Grammar</span>
+</a>
+<!-- Links (ACTIVE MAPPING) -->
+<a class="flex items-center gap-3 px-4 py-3 text-indigo-700 font-semibold border-r-4 border-indigo-600 bg-indigo-50/50 transition-all rounded-l-xl" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">link</span>
+<span class="text-sm font-semibold">Links</span>
+</a>
+</nav>
+<div class="p-4 mt-auto space-y-4">
+<div class="bg-gradient-to-br from-indigo-600 to-indigo-800 p-4 rounded-2xl shadow-lg shadow-indigo-200">
+<p class="text-white text-xs font-bold mb-1">Upgrade Pro</p>
+<p class="text-indigo-100 text-[10px] leading-relaxed mb-3">Unlock advanced heuristics and real-time link latency tracking.</p>
+<button class="w-full bg-white text-indigo-700 py-2 rounded-lg text-xs font-bold hover:bg-indigo-50 transition-colors">Go Premium</button>
+</div>
+<div class="border-t border-slate-200 pt-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-indigo-600 transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">help</span>
+<span class="text-sm">Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-error transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">logout</span>
+<span class="text-sm">Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- TopNavBar (Authority Source: JSON) -->
+<header class="sticky top-0 w-[calc(100%-16rem)] ml-64 flex justify-between items-center px-8 py-4 bg-white/80 backdrop-blur-lg border-b border-indigo-100/20 shadow-sm z-40">
+<div class="flex items-center gap-4">
+<h2 class="text-xl font-bold font-headline text-on-surface tracking-tight">Link Health Analysis</h2>
+<span class="bg-indigo-50 text-indigo-600 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">Live Monitoring</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-lg">search</span>
+<input class="bg-surface-container-low border-none rounded-full pl-10 pr-4 py-2 text-sm w-64 focus:ring-2 focus:ring-primary/20 placeholder:text-slate-400" placeholder="Search destinations..." type="text"/>
+</div>
+<div class="flex items-center gap-3 border-l border-slate-200 pl-6">
+<button class="relative p-2 text-slate-600 hover:bg-slate-50 rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-white"></span>
+</button>
+<button class="p-2 text-slate-600 hover:bg-slate-50 rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden ml-2 ring-2 ring-indigo-50">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Close-up headshot of a professional woman in a modern office setting, soft natural lighting, high-end editorial look" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0mzemClsH24ytS9pxkSwLYpX_-6va8FdnfraBraUFVrXHex_bSUY4cvRT3MKcXQQ1iUT5kr9xIiBEOPao8S2yWpUMS_iIwn1hYFEpW5IJmiwDXMg8S86GaSGBOIGI178rWVp-grxYmf554gGlEqwpGCZ2gEBar0tP_CZbq2_LHPtBbhk1Qg35UMsjk_jpf1YPWf43G6645up8S8wp21gE_nQe_iRAmKJb8VEDz7wfX88iqJT3NBg0LhyFGyzlv5dduyrd3icTjRE8"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 p-8 min-h-[calc(100vh-72px)] bg-background">
+<section class="mb-8 bg-surface-container-lowest rounded-2xl border border-outline-variant/10 p-6 space-y-3 shadow-sm">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<h3 class="text-sm font-bold font-headline text-on-surface">Email HTML</h3>
+<span id="clarity-links-status" class="text-xs text-on-surface-variant"></span>
+</div>
+<div data-clarity-manual-only class="space-y-3">
+<textarea id="clarity-link-email-html" rows="8" class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-low p-4 text-xs font-mono focus:ring-2 focus:ring-primary/30" placeholder="Paste full email HTML…">&lt;html&gt;&lt;body&gt;&lt;a href=&quot;https://example.com&quot;&gt;Shop&lt;/a&gt; &lt;a href=&quot;http://insecure.example/x&quot;&gt;Old&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</textarea>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+<input id="clarity-link-expected-host" class="rounded-xl border border-outline-variant/20 bg-white px-3 py-2 text-sm" placeholder="Expected brand host (optional), e.g. example.com" type="text"/>
+<input id="clarity-link-base-url" class="rounded-xl border border-outline-variant/20 bg-white px-3 py-2 text-sm" placeholder="Base URL for relative links (optional)" type="url"/>
+<button id="clarity-run-links" type="button" class="rounded-xl bg-primary text-white px-4 py-2 text-sm font-bold hover:shadow-lg">Analyze links</button>
+</div>
+</div>
+</section>
+<!-- Metric Grid (Sparklines & High contrast) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+<!-- Success Rate -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-transparent shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-tertiary-fixed rounded-lg">
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<span class="text-on-tertiary-fixed-variant font-bold text-xs">+2.4%</span>
+</div>
+<div>
+<h3 class="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-1">Success Rate</h3>
+<div class="flex items-baseline gap-2">
+<span id="clarity-metric-ok-pct" class="text-3xl font-extrabold font-headline">—<span class="text-xl">%</span></span>
+</div>
+</div>
+<div class="mt-4 h-12 flex items-end gap-1">
+<div class="w-full bg-tertiary-container/10 h-10 rounded-sm relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-r from-tertiary-container/30 to-primary-container/30" style="clip-path: polygon(0 80%, 10% 70%, 20% 85%, 30% 60%, 40% 65%, 50% 40%, 60% 50%, 70% 30%, 80% 45%, 90% 20%, 100% 25%, 100% 100%, 0 100%);"></div>
+</div>
+</div>
+</div>
+<!-- Broken Links -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-transparent shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-error-container rounded-lg">
+<span class="material-symbols-outlined text-on-error-container" style="font-variation-settings: 'FILL' 1;">link_off</span>
+</div>
+<span class="text-error font-bold text-xs">-12</span>
+</div>
+<div>
+<h3 class="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-1">Broken Links</h3>
+<div class="flex items-baseline gap-2">
+<span id="clarity-metric-broken" class="text-3xl font-extrabold font-headline">—</span>
+</div>
+</div>
+<div class="mt-4 h-12 flex items-end gap-1">
+<div class="w-full bg-error-container/10 h-10 rounded-sm relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-r from-error/30 to-error/10" style="clip-path: polygon(0 20%, 15% 40%, 30% 35%, 45% 60%, 60% 55%, 75% 85%, 90% 80%, 100% 95%, 100% 100%, 0 100%);"></div>
+</div>
+</div>
+</div>
+<!-- Redirects -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-transparent shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-secondary-fixed rounded-lg">
+<span class="material-symbols-outlined text-on-secondary-fixed-variant" style="font-variation-settings: 'FILL' 1;">alt_route</span>
+</div>
+<span class="text-on-secondary-fixed-variant font-bold text-xs">+114</span>
+</div>
+<div>
+<h3 class="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-1">Active Redirects</h3>
+<div class="flex items-baseline gap-2">
+<span id="clarity-metric-redirects" class="text-3xl font-extrabold font-headline">—</span>
+</div>
+</div>
+<div class="mt-4 h-12 flex items-end gap-1">
+<div class="w-full bg-secondary-container/10 h-10 rounded-sm relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-r from-secondary-container/40 to-secondary-container/20" style="clip-path: polygon(0 60%, 20% 55%, 40% 65%, 60% 50%, 80% 55%, 100% 45%, 100% 100%, 0 100%);"></div>
+</div>
+</div>
+</div>
+<!-- Latency -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-transparent shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary-fixed rounded-lg">
+<span class="material-symbols-outlined text-on-primary-fixed-variant" style="font-variation-settings: 'FILL' 1;">speed</span>
+</div>
+<span class="text-on-primary-fixed-variant font-bold text-xs">-14ms</span>
+</div>
+<div>
+<h3 class="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-1">Avg. Latency</h3>
+<div class="flex items-baseline gap-2">
+<span id="clarity-metric-latency" class="text-3xl font-extrabold font-headline">—<span class="text-xl">ms</span></span>
+</div>
+</div>
+<div class="mt-4 h-12 flex items-end gap-1">
+<div class="w-full bg-primary-container/10 h-10 rounded-sm relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-r from-primary-container/40 to-primary-container/20" style="clip-path: polygon(0 75%, 10% 80%, 20% 70%, 30% 75%, 40% 60%, 50% 65%, 60% 50%, 70% 55%, 80% 40%, 90% 45%, 100% 30%, 100% 100%, 0 100%);"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Analytical Data Grid Section -->
+<div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-transparent overflow-hidden">
+<!-- Grid Header & Filters -->
+<div class="p-6 border-b border-surface-container flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
+<div class="flex items-center gap-4">
+<h3 class="text-lg font-bold font-headline">Link Repository</h3>
+<div class="flex items-center gap-2 bg-surface-container-low p-1 rounded-lg">
+<button class="px-3 py-1.5 text-xs font-bold bg-white text-primary rounded-md shadow-sm">All Links</button>
+<button class="px-3 py-1.5 text-xs font-medium text-on-surface-variant hover:bg-white/50 rounded-md transition-colors">Alerts Only</button>
+<button class="px-3 py-1.5 text-xs font-medium text-on-surface-variant hover:bg-white/50 rounded-md transition-colors">Archived</button>
+</div>
+</div>
+<div class="flex items-center gap-3 w-full lg:w-auto">
+<div class="flex items-center gap-2 px-3 py-2 bg-surface-container-low rounded-lg border border-transparent focus-within:border-primary/30 transition-all">
+<span class="material-symbols-outlined text-slate-400 text-sm">filter_list</span>
+<select class="bg-transparent border-none text-xs font-bold focus:ring-0 p-0 pr-6 text-on-surface-variant">
+<option>Status: All</option>
+<option>Status: Active (200)</option>
+<option>Status: Broken (404)</option>
+<option>Status: Redirect (301)</option>
+</select>
+</div>
+<button id="clarity-run-links-toolbar" type="button" data-clarity-manual-only class="flex items-center gap-2 px-4 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm">add</span>
+                        Bulk Analyze
+                    </button>
+<button class="p-2 bg-surface-container-low text-on-surface-variant rounded-lg hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-sm">download</span>
+</button>
+</div>
+</div>
+<!-- Table Container -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant text-[10px] uppercase tracking-widest font-bold">
+<th class="px-6 py-4 w-10">
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary/20" type="checkbox"/>
+</th>
+<th class="px-6 py-4">Destination Path</th>
+<th class="px-6 py-4 text-center">Status</th>
+<th class="px-6 py-4">Last Checked</th>
+<th class="px-6 py-4 text-right">Latency</th>
+<th class="px-6 py-4 text-center">Protocol</th>
+<th class="px-6 py-4">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="px-6 py-5">
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary/20" type="checkbox"/>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-on-surface truncate max-w-[280px]">/api/v2/user-authentication/verify</span>
+<span class="text-[10px] text-slate-400 font-medium">https://auth.deliverably.io</span>
+</div>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="px-2.5 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant text-[10px] font-bold rounded-full border border-tertiary/10">200 OK</span>
+</td>
+<td class="px-6 py-5">
+<span class="text-xs text-on-surface-variant font-medium">2 mins ago</span>
+</td>
+<td class="px-6 py-5 text-right">
+<span class="text-xs font-bold text-on-surface">142ms</span>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="material-symbols-outlined text-primary text-sm" title="HTTPS Secured">lock</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 hover:bg-surface-container-high rounded-md transition-colors text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-sm">visibility</span>
+</button>
+<button class="p-1.5 hover:bg-surface-container-high rounded-md transition-colors text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-sm">bar_chart</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="px-6 py-5">
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary/20" type="checkbox"/>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-on-surface truncate max-w-[280px]">/resources/whitepapers/saas-delivery-2024.pdf</span>
+<span class="text-[10px] text-slate-400 font-medium">https://cdn.deliverably.io</span>
+</div>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="px-2.5 py-1 bg-error-container text-on-error-container text-[10px] font-bold rounded-full border border-error/10">404 BROKEN</span>
+</td>
+<td class="px-6 py-5">
+<span class="text-xs text-on-surface-variant font-medium">12 mins ago</span>
+</td>
+<td class="px-6 py-5 text-right">
+<span class="text-xs font-bold text-error">--</span>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="material-symbols-outlined text-slate-300 text-sm">lock_open</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 hover:bg-surface-container-high rounded-md transition-colors text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-sm">refresh</span>
+</button>
+<button class="p-1.5 hover:bg-surface-container-high rounded-md transition-colors text-slate-400 hover:text-error">
+<span class="material-symbols-outlined text-sm">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="px-6 py-5">
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary/20" type="checkbox"/>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-on-surface truncate max-w-[280px]">/pricing</span>
+<span class="text-[10px] text-slate-400 font-medium">https://deliverably.com</span>
+</div>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="px-2.5 py-1 bg-secondary-fixed text-on-secondary-fixed-variant text-[10px] font-bold rounded-full border border-secondary/10">301 MOVED</span>
+</td>
+<td class="px-6 py-5">
+<span class="text-xs text-on-surface-variant font-medium">45 mins ago</span>
+</td>
+<td class="px-6 py-5 text-right">
+<span class="text-xs font-bold text-on-surface">310ms</span>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="material-symbols-outlined text-primary text-sm">lock</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 hover:bg-surface-container-high rounded-md transition-colors text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-sm">visibility</span>
+</button>
+<button class="p-1.5 hover:bg-surface-container-high rounded-md transition-colors text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="px-6 py-5">
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary/20" type="checkbox"/>
+</td>
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-on-surface truncate max-w-[280px]">/webhooks/inbound-mail-handler</span>
+<span class="text-[10px] text-slate-400 font-medium">https://api.deliverably.io</span>
+</div>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="px-2.5 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant text-[10px] font-bold rounded-full border border-tertiary/10">200 OK</span>
+</td>
+<td class="px-6 py-5">
+<span class="text-xs text-on-surface-variant font-medium">1 hour ago</span>
+</td>
+<td class="px-6 py-5 text-right">
+<span class="text-xs font-bold text-on-surface">512ms</span>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="material-symbols-outlined text-primary text-sm">lock</span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 hover:bg-surface-container-high rounded-md transition-colors text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-sm">visibility</span>
+</button>
+<button class="p-1.5 hover:bg-surface-container-high rounded-md transition-colors text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-sm">bar_chart</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination (Ghost buttons, design system mandated) -->
+<div class="px-6 py-4 bg-surface-container-low/20 border-t border-surface-container flex items-center justify-between">
+<span class="text-xs font-medium text-on-surface-variant">Showing <span class="font-bold text-on-surface">1-4</span> of <span class="font-bold text-on-surface">842</span> items</span>
+<div class="flex items-center gap-1">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center text-xs font-bold bg-primary-container text-white rounded-md">1</button>
+<button class="w-8 h-8 flex items-center justify-center text-xs font-medium text-on-surface-variant hover:bg-surface-container-high rounded-md transition-colors">2</button>
+<button class="w-8 h-8 flex items-center justify-center text-xs font-medium text-on-surface-variant hover:bg-surface-container-high rounded-md transition-colors">3</button>
+<span class="px-2 text-slate-400">...</span>
+<button class="w-8 h-8 flex items-center justify-center text-xs font-medium text-on-surface-variant hover:bg-surface-container-high rounded-md transition-colors">12</button>
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Asymmetric Analysis Section (Editorial Precision) -->
+<div class="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2 bg-surface-container-lowest p-8 rounded-2xl shadow-sm">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h4 class="text-xl font-bold font-headline mb-1">Latency Distribution</h4>
+<p class="text-sm text-on-surface-variant">Response time consistency across global edge nodes.</p>
+</div>
+<button class="text-xs font-bold text-primary flex items-center gap-1">
+                        View Full Report <span class="material-symbols-outlined text-sm">north_east</span>
+</button>
+</div>
+<!-- Visual Placeholder for complex chart -->
+<div class="h-64 flex items-end justify-between gap-4 px-4 pt-4">
+<div class="w-full bg-primary-fixed/20 h-[30%] rounded-t-lg relative group">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">US-East</div>
+</div>
+<div class="w-full bg-primary h-[85%] rounded-t-lg relative group shadow-lg shadow-primary/20">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">US-West</div>
+</div>
+<div class="w-full bg-primary-fixed/20 h-[45%] rounded-t-lg relative group">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">EU-Central</div>
+</div>
+<div class="w-full bg-primary-fixed/20 h-[60%] rounded-t-lg relative group">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">AP-South</div>
+</div>
+<div class="w-full bg-primary-fixed/20 h-[35%] rounded-t-lg relative group">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">SA-East</div>
+</div>
+</div>
+<div class="flex justify-between mt-4 px-2">
+<span class="text-[10px] font-bold text-slate-400">AMER</span>
+<span class="text-[10px] font-bold text-slate-400">EMEA</span>
+<span class="text-[10px] font-bold text-slate-400">APAC</span>
+</div>
+</div>
+<div class="bg-gradient-to-br from-inverse-surface to-[#111c2d] p-8 rounded-2xl shadow-xl flex flex-col justify-between text-white overflow-hidden relative">
+<!-- Atmospheric Glow Background (Glassmorphism effect) -->
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary opacity-20 blur-[60px] rounded-full"></div>
+<div class="absolute bottom-0 left-0 w-32 h-32 bg-primary opacity-20 blur-[60px] rounded-full"></div>
+<div class="relative z-10">
+<span class="bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6 inline-block">Heuristic Insight</span>
+<h4 class="text-2xl font-bold font-headline mb-4 leading-tight">Redirect chains are slowing down conversion.</h4>
+<p class="text-slate-300 text-sm leading-relaxed mb-6">Our analysis identified 14 landing pages with 3+ hops. Resolving these could improve FCP by <span class="text-secondary-fixed-dim font-bold">420ms</span> on average.</p>
+</div>
+<div class="relative z-10">
+<div class="flex -space-x-3 mb-6">
+<img alt="Analyst" class="w-10 h-10 rounded-full border-2 border-inverse-surface object-cover" data-alt="Portrait of a young tech analyst with glasses, warm professional lighting, modern corporate aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEfXyst_wFujMPwSxd-qEyut5UX4gXuDzmlkM8v6096oUhk-xzwciY_SwFBxh0D3WAXqdnsmze0FESA3hTAC_lCki7jaWcVrCQxcsueAs5GwkkVVTdRMxwWunAZsaIAybscQ7KEnUvg3-vtKmYs_Zq_H4dEAJ23IpToG7KUSE0hiVHgMADpNSRSdF8s9_dfmpBHAOeD_FLzsFXnRqeXv5SXyxnz17rvzQN9cOdbxzWT25D7XglkdtmtsmdnT8zBH78O4dxL9oxAmaV"/>
+<img alt="Analyst" class="w-10 h-10 rounded-full border-2 border-inverse-surface object-cover" data-alt="Portrait of a female data scientist smiling in a modern office, cinematic side lighting, high resolution" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAi3dMGsXZl7fXVQ7SsxMAPGKnb5lGT6uJEMaeyCGOQBxdvvSsfnx0dEHrMz6eUY8uCHsXVlF4awsTbA4eX2MZrPsxMvsr5dbulgmyKiZrvrmMlTiB3EV60PZjaUD1vQWXSEvO7210TyC3FCY5qpE6t5-d6A3LUPMn8F9qbE946PcA9EQSA2KekzPH7unE4_qE3d2Y2S1s-9d9-lQEwemP7rfqzQrOFsP1NX_vkLroJrWWhAD0V0Jm1pN_w_Oev5Dlb5TcKjcVFC7uQ"/>
+<div class="w-10 h-10 rounded-full border-2 border-inverse-surface bg-surface-container-highest flex items-center justify-center text-[10px] font-bold text-on-surface">AI+</div>
+</div>
+<button class="w-full bg-white text-on-surface py-3 rounded-lg text-sm font-bold hover:bg-slate-100 transition-colors flex items-center justify-center gap-2">
+                        Run Optimization Script
+                        <span class="material-symbols-outlined text-sm">auto_fix_high</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB (Mandatory Suppression applied: only relevant for action-heavy pages) -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-white rounded-full shadow-2xl shadow-primary/40 flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_link</span>
+</button>
+<script>window.CLARITY_API_BASE = window.CLARITY_API_BASE || "http://localhost:3000";</script>
+<script src="js/clarity-workflow-common.js"></script>
+<script src="js/clarity-api.js"></script>
+<script src="js/links-page.js"></script>
+</body></html>

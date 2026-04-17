@@ -1,0 +1,36 @@
+# Run from this directory: npm run setup:env  →  docker compose up --build
+# Put AWS credentials (or use host IAM / profile via compose) and enable your Bedrock model in `.env`.
+# UI: http://localhost:8080/index.html (workflow) or /grammar.html  |  API: http://localhost:3000/health
+services:
+  clarity-api:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: "3000"
+      CORS_ORIGIN: "http://localhost:8080,http://127.0.0.1:8080"
+      LLM_PROVIDER: ${LLM_PROVIDER:-bedrock}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN:-}
+      BEDROCK_MODEL_ID: ${BEDROCK_MODEL_ID:-amazon.nova-micro-v1:0}
+      BEDROCK_MAX_TOKENS: ${BEDROCK_MAX_TOKENS:-8192}
+      BEDROCK_TEMPERATURE: ${BEDROCK_TEMPERATURE:-0.2}
+      BEDROCK_ENDPOINT_URL: ${BEDROCK_ENDPOINT_URL:-}
+      CLARITY_API_KEY: ${CLARITY_API_KEY:-}
+      # Legacy providers (set LLM_PROVIDER + keys in .env if needed)
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-flash}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.openai.com/v1}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+
+  clarity-ui:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ../clarity-ui:/usr/share/nginx/html:ro
+    depends_on:
+      - clarity-api

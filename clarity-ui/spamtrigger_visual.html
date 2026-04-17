@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Deliverably Clarity - Spam Trigger Visual Mode</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#232ccc",
+              "surface": "#f9f9ff",
+              "on-tertiary": "#ffffff",
+              "error-container": "#ffdad6",
+              "tertiary-fixed": "#c9e6ff",
+              "on-error-container": "#93000a",
+              "tertiary-fixed-dim": "#89ceff",
+              "surface-container-highest": "#d8e3fb",
+              "on-tertiary-container": "#b8e0ff",
+              "on-primary-fixed-variant": "#202aca",
+              "outline-variant": "#c7c4d8",
+              "surface-bright": "#f9f9ff",
+              "secondary-container": "#9e41f5",
+              "primary-container": "#404be3",
+              "on-secondary-container": "#fffbff",
+              "secondary-fixed-dim": "#ddb8ff",
+              "on-error": "#ffffff",
+              "inverse-surface": "#263143",
+              "background": "#f9f9ff",
+              "surface-container-high": "#dee8ff",
+              "on-secondary": "#ffffff",
+              "surface-tint": "#3e49e2",
+              "on-secondary-fixed": "#2c0051",
+              "error": "#ba1a1a",
+              "on-surface": "#111c2d",
+              "secondary-fixed": "#f0dbff",
+              "on-primary-container": "#d7d8ff",
+              "on-primary": "#ffffff",
+              "secondary": "#831ada",
+              "on-surface-variant": "#464555",
+              "on-background": "#111c2d",
+              "outline": "#777587",
+              "surface-dim": "#cfdaf2",
+              "primary-fixed": "#e0e0ff",
+              "surface-container-low": "#f0f3ff",
+              "on-secondary-fixed-variant": "#6800b4",
+              "inverse-on-surface": "#ecf1ff",
+              "primary-fixed-dim": "#bec2ff",
+              "surface-variant": "#d8e3fb",
+              "inverse-primary": "#bec2ff",
+              "surface-container": "#e7eeff",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed": "#001e2f",
+              "on-primary-fixed": "#00026c",
+              "on-tertiary-fixed-variant": "#004c6e",
+              "tertiary-container": "#006693",
+              "tertiary": "#004d70"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-on-surface">
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm flex items-center justify-between px-6 h-16 max-w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tight text-slate-900 font-headline">Deliverably Clarity</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-slate-500 font-medium hover:text-indigo-500 transition-colors" href="#">Dashboard</a>
+<a class="text-slate-500 font-medium hover:text-indigo-500 transition-colors" href="#">Analytics</a>
+<a class="text-slate-500 font-medium hover:text-indigo-500 transition-colors" href="#">Templates</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">notifications</span>
+</div>
+<div class="relative group">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">settings</span>
+</div>
+<img alt="User profile avatar" class="w-8 h-8 rounded-full border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDipwkCrNjVk6wbuORifLM-rgS6RY3Gysd644pp8cY41tjxjtSRpWVa6VnmniGFaX2SL5qwovzEzQKgkezlLv67cgG8sgAD7C1HDJ0Vm7i-16S-9RcnELN6JQgK3JKxp4mVpGflWaOf7_7L35C1xcH4tv97tzvd0yiS_j1cnVFeK-8PFMzkCvFPBLJFDYXOBB4U5RqGtCSid5vWEhHAkhktWCHGN6iQumzuuM1mzKP_56nbPA9qn8GMkbL7-xd2y-F-09ELZsD0wN-r"/>
+</div>
+</header>
+<!-- SideNavBar Shell -->
+<aside class="h-screen w-64 fixed left-0 top-0 z-40 bg-slate-50 border-r border-slate-200 flex flex-col p-4 gap-2 pt-20">
+<div class="mb-6 px-2">
+<h2 class="font-headline font-extrabold text-indigo-700 text-lg">Clarity Engine</h2>
+<p class="text-xs text-on-surface-variant">High-Performance SaaS</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-slate-200 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium text-sm">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-indigo-50 text-indigo-700 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">security</span>
+<span class="font-medium text-sm">Spam Trigger</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-slate-200 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">find_in_page</span>
+<span class="font-medium text-sm">Email Auditor</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-slate-200 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">auto_stories</span>
+<span class="font-medium text-sm">Word Library</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-slate-200 rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">send</span>
+<span class="font-medium text-sm">Campaigns</span>
+</a>
+</nav>
+<button class="mt-4 w-full py-2.5 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-bold text-sm shadow-md flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span>
+            New Audit
+        </button>
+<div class="mt-auto border-t border-slate-200 pt-4 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-slate-200 rounded-lg transition-all text-sm" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+                Help Center
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-slate-200 rounded-lg transition-all text-sm" href="#">
+<span class="material-symbols-outlined">logout</span>
+                Sign Out
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pl-64 pt-16 min-h-screen bg-surface">
+<div class="p-8 max-w-7xl mx-auto">
+<section class="mb-6 rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-4 space-y-2">
+<p id="clarity-spam-status" class="text-xs text-on-surface-variant min-h-[1rem]"></p>
+<div data-clarity-manual-only class="space-y-2">
+<textarea id="clarity-spam-email" rows="4" class="w-full rounded-lg border border-outline-variant/30 bg-white p-3 text-sm" placeholder="Paste email copy…">ACT NOW!!! Get 100% FREE cash bonus — limited time only.</textarea>
+<div class="flex gap-2 items-center">
+<button id="clarity-run-spam" type="button" class="rounded-lg bg-on-surface px-4 py-2 text-sm font-bold text-white hover:bg-primary">Run spam detection</button>
+<button type="button" data-clarity-run-spam="1" class="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Re-run</button>
+</div>
+</div>
+</section>
+<!-- Quick Spam Word Checker Top Section -->
+<section class="mb-8 flex flex-col md:flex-row items-end justify-between gap-6">
+<div class="space-y-2">
+<h1 class="font-headline text-3xl font-extrabold text-on-surface tracking-tight">Quick Spam Word Checker</h1>
+<div class="flex items-center gap-4">
+<div class="bg-error-container text-on-error-container px-4 py-1.5 rounded-full flex items-center gap-2 border border-error/20">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span id="clarity-spam-visual-count" class="font-bold text-lg">— Spam Words Found</span>
+</div>
+<div class="text-on-surface-variant font-medium flex items-center gap-2">
+<span class="material-symbols-outlined">visibility</span>
+<span>Image View Mode</span>
+</div>
+</div>
+</div>
+<div class="flex bg-surface-container-high p-1 rounded-xl shadow-inner">
+<button class="px-6 py-2 rounded-lg text-sm font-semibold text-on-surface-variant hover:text-primary transition-all">Source Code</button>
+<button class="px-6 py-2 rounded-lg bg-surface-container-lowest shadow-sm text-sm font-bold text-primary transition-all">Image View</button>
+</div>
+</section>
+<!-- Main Bento Layout -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Central Image View Canvas -->
+<div class="col-span-12 lg:col-span-8 space-y-4">
+<div class="relative bg-surface-container-low rounded-2xl overflow-hidden shadow-sm border border-outline-variant/10 min-h-[700px] flex items-start justify-center p-8">
+<!-- Simulated Email Design Image -->
+<div id="clarity-spam-visual-body" class="relative max-w-xl w-full bg-white shadow-2xl rounded-sm overflow-hidden p-12 space-y-8 text-left">
+<p class="text-sm text-slate-500">Run spam detection to highlight triggers in this preview.</p>
+</div>
+<!-- Luminous Overlays Layer (Abstract Visual Markers) -->
+<div class="absolute inset-0 pointer-events-none border-4 border-primary/5 rounded-2xl"></div>
+</div>
+</div>
+<!-- Side Panel: Replacement Suggestions -->
+<div class="col-span-12 lg:col-span-4 space-y-6">
+<div class="glass-panel p-6 rounded-2xl shadow-xl border border-outline-variant/20 sticky top-24">
+<div class="flex items-center justify-between mb-6">
+<h4 class="font-headline font-bold text-xl">Fix Suggestions</h4>
+<span class="material-symbols-outlined text-primary cursor-help">info</span>
+</div>
+<div id="clarity-spam-visual-cards" class="space-y-4">
+<p class="text-sm text-on-surface-variant">Suggestions appear here after analysis.</p>
+</div>
+<div class="mt-8 pt-6 border-t border-outline-variant/30 text-center">
+<button class="text-primary font-bold text-sm hover:underline flex items-center justify-center gap-2 mx-auto">
+<span class="material-symbols-outlined">auto_fix</span>
+                                Auto-replace all low risk
+                            </button>
+</div>
+</div>
+<!-- Meta Stats -->
+<div class="p-6 bg-surface-container-low rounded-2xl space-y-4">
+<p class="text-xs font-extrabold text-on-surface-variant tracking-widest uppercase">Content Health Score</p>
+<div class="flex items-center justify-between">
+<div class="text-4xl font-headline font-extrabold text-error">42%</div>
+<div class="flex-1 ml-4 h-3 bg-white rounded-full overflow-hidden border border-outline-variant/30">
+<div class="h-full bg-error rounded-full" style="width: 42%"></div>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed">
+                            Your current draft has a high probability of triggering Gmail's "Promotions" or "Spam" filter due to aggressive marketing terminology.
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB (Suppressed as per rules for specialized detail pages, but added as placeholder if top-level logic were to change) -->
+<!-- Suppressed -->
+<script>window.CLARITY_API_BASE = window.CLARITY_API_BASE || "http://localhost:3000";</script>
+<script src="js/clarity-workflow-common.js"></script>
+<script src="js/clarity-api.js"></script>
+<script src="js/remaining-pages.js"></script>
+</body></html>

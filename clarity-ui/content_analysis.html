@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clarity Suite | AI Content Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-low": "#f0f3ff",
+              "primary-fixed-dim": "#bec2ff",
+              "on-tertiary-fixed-variant": "#004c6e",
+              "secondary-fixed": "#f0dbff",
+              "primary": "#232ccc",
+              "tertiary": "#004d70",
+              "surface-variant": "#d8e3fb",
+              "on-primary-fixed": "#00026c",
+              "on-error": "#ffffff",
+              "on-error-container": "#93000a",
+              "primary-container": "#404be3",
+              "surface-container-highest": "#d8e3fb",
+              "tertiary-fixed-dim": "#89ceff",
+              "outline": "#777587",
+              "secondary": "#831ada",
+              "on-tertiary-container": "#b8e0ff",
+              "secondary-container": "#9e41f5",
+              "surface-bright": "#f9f9ff",
+              "on-tertiary-fixed": "#001e2f",
+              "on-primary-container": "#d7d8ff",
+              "error": "#ba1a1a",
+              "on-surface": "#111c2d",
+              "background": "#f9f9ff",
+              "secondary-fixed-dim": "#ddb8ff",
+              "surface-tint": "#3e49e2",
+              "on-secondary-container": "#fffbff",
+              "outline-variant": "#c7c4d8",
+              "on-tertiary": "#ffffff",
+              "surface-dim": "#cfdaf2",
+              "inverse-surface": "#263143",
+              "on-secondary-fixed-variant": "#6800b4",
+              "on-secondary-fixed": "#2c0051",
+              "surface-container-high": "#dee8ff",
+              "error-container": "#ffdad6",
+              "tertiary-fixed": "#c9e6ff",
+              "on-secondary": "#ffffff",
+              "on-surface-variant": "#464555",
+              "inverse-on-surface": "#ecf1ff",
+              "on-primary-fixed-variant": "#202aca",
+              "tertiary-container": "#006693",
+              "surface-container-lowest": "#ffffff",
+              "surface": "#f9f9ff",
+              "on-primary": "#ffffff",
+              "primary-fixed": "#e0e0ff",
+              "surface-container": "#e7eeff",
+              "on-background": "#111c2d",
+              "inverse-primary": "#bec2ff"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background selection:bg-primary-fixed-dim">
+<!-- Sidebar Navigation -->
+<aside class="h-screen w-64 fixed left-0 top-0 z-50 bg-slate-50 dark:bg-slate-950 border-r border-slate-200/50 dark:border-slate-800/50 flex flex-col py-6 px-4">
+<div class="flex items-center gap-3 px-2 mb-10">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div>
+<h2 class="text-lg font-black text-indigo-700 dark:text-indigo-500 leading-tight">Clarity Suite</h2>
+<p class="text-xs font-medium text-on-surface-variant opacity-70">Enterprise AI</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 font-bold border-r-4 border-indigo-600 translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<span class="text-sm font-medium">AI Analysis</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all" href="#">
+<span class="material-symbols-outlined">library_books</span>
+<span class="text-sm font-medium">Content Library</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Team</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="text-sm font-medium">Analytics</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 space-y-1 border-t border-slate-200/50">
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="text-sm font-medium">Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-colors" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-sm font-medium">Account</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- Top App Bar -->
+<header class="fixed top-0 right-0 left-64 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md flex justify-between items-center px-8 h-16 shadow-sm dark:shadow-none">
+<div class="flex items-center gap-4">
+<h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">Deliverably Analysis</h1>
+<div class="h-4 w-px bg-slate-200 mx-2"></div>
+<div class="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-semibold text-sm">
+<span>Spring Launch Campaign</span>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-slate-100 transition-colors text-slate-500">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-slate-100 transition-colors text-slate-500">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-px bg-slate-200"></div>
+<img alt="User profile avatar" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary/10" data-alt="professional headshot of a female creative director in a minimalist studio setting with soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5xxlOLByVvjwWCP6IAoyAXxFgqIB_NeQKcwwlUeZkgT18B4RPrM8nS0X9hI5C_rDPNdWRj23fAdq9sFRVTA9t4WuBjSWLqib4wTDok46akUg4P_qlXY3HbocO43DUtG6qfpXrrag3-v6YdPah559inXc5H5q3M9qelorUj63ogHMtHwZzUYj0nZPtz_sCZYBl3c7wQZKG73jTSc75O7fCcD932j3KOI71qDW6FccKY5wzQ6LHi6X5aBPVpE26MUOeyFkJYONYhiMR"/>
+</div>
+</header>
+<div class="pt-24 px-10 pb-12">
+<section class="mb-8 rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-6 space-y-3 shadow-sm">
+<p id="clarity-design-status" class="text-xs text-on-surface-variant min-h-[1rem]"></p>
+<div data-clarity-manual-only class="space-y-3">
+<label class="text-xs font-bold text-on-surface-variant uppercase">Subject line</label>
+<input id="clarity-design-subject" type="text" class="w-full rounded-lg border border-outline-variant/30 bg-white px-3 py-2 text-sm" value="Spring Launch: Save 20% Today"/>
+<label class="text-xs font-bold text-on-surface-variant uppercase">Email HTML</label>
+<textarea id="clarity-design-html" rows="6" class="w-full rounded-lg border border-outline-variant/30 bg-white p-3 text-xs font-mono">&lt;h1&gt;Hello&lt;/h1&gt;&lt;p&gt;Shop our sale.&lt;/p&gt;&lt;a href=&quot;#&quot;&gt;Buy now&lt;/a&gt;</textarea>
+<div class="flex flex-wrap items-center gap-3">
+<button id="clarity-run-design" type="button" class="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white">Run design analysis</button>
+</div>
+</div>
+</section>
+<!-- Hero Card: Quality Score -->
+<section class="mb-10 bg-surface-container-lowest rounded-xl p-8 shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+<div class="absolute bottom-0 left-0 w-48 h-48 bg-secondary/5 rounded-full -ml-24 -mb-24 blur-3xl"></div>
+<div class="relative flex flex-col lg:flex-row gap-12 items-center">
+<div class="flex items-center gap-8">
+<div class="relative flex items-center justify-center">
+<svg class="w-32 h-32 transform -rotate-90">
+<circle class="text-surface-container-low" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-dasharray="364.4" stroke-dashoffset="29.1" stroke-width="8"></circle>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span id="clarity-design-overall" class="text-4xl font-extrabold text-on-surface">—</span>
+<span class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant">Score</span>
+</div>
+</div>
+<div>
+<h2 class="text-2xl font-bold text-on-surface mb-1">Overall Quality Score</h2>
+<p class="text-on-surface-variant text-sm max-w-xs leading-relaxed">Your content is performing at an elite level. Minor adjustments can unlock even higher engagement.</p>
+</div>
+</div>
+<div class="flex-1 w-full grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<span class="text-sm font-semibold text-on-surface">Subject Line</span>
+<span id="clarity-pct-subject" class="text-xs font-bold text-primary">—%</span>
+</div>
+<div class="h-2 bg-surface-container-low rounded-full overflow-hidden">
+<div id="clarity-bar-subject" class="h-full bg-primary rounded-full" style="width: 0%"></div>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<span class="text-sm font-semibold text-on-surface">Content Clarity</span>
+<span id="clarity-pct-content" class="text-xs font-bold text-secondary">—%</span>
+</div>
+<div class="h-2 bg-surface-container-low rounded-full overflow-hidden">
+<div id="clarity-bar-content" class="h-full bg-secondary rounded-full" style="width: 0%"></div>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<span class="text-sm font-semibold text-on-surface">CTA Strength</span>
+<span id="clarity-pct-cta" class="text-xs font-bold text-tertiary">—%</span>
+</div>
+<div class="h-2 bg-surface-container-low rounded-full overflow-hidden">
+<div id="clarity-bar-cta" class="h-full bg-tertiary rounded-full" style="width: 0%"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Analysis Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-10 gap-8">
+<!-- Left: Email Mockup & AI Tooltips -->
+<div class="lg:col-span-6 space-y-6">
+<div class="flex items-center justify-between px-2">
+<h3 class="text-lg font-bold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">visibility</span>
+                            Content Preview
+                        </h3>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-surface-container-low text-[10px] font-bold uppercase tracking-wider rounded-full">Desktop View</span>
+<span class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-on-surface-variant opacity-50">Mobile</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm min-h-[600px] relative border border-outline-variant/10">
+<div class="max-w-md mx-auto bg-white shadow-2xl rounded-lg overflow-hidden relative">
+<!-- Hero Image in Email -->
+<img alt="Modern abstract background" class="w-full h-48 object-cover" data-alt="ultra-modern minimalist workspace with sleek glass desk, chrome lighting, and a view of a neon-lit futuristic city at dusk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBO4raLacbREF5-vz0J0KSxx3fmvVVPlunPthxVTs6Uf09oMukeGtZTABGW-sgSLDsTGjr3QLo5lpggEk5SYnBcabi6UsHtWIJrbgrCb2-c9HrQDCzQUZi4R-HUAws67KL0t3ilxgFFrBSr4tFjPpgwsUI3a10pgouBG0s9PP13b1swzgJJqCTvUxT7qApEVM_Ux6SbSsDCEOnzkZqp_fPWsOdp2vN7MVJDdaCdYNp3qeiB_wyDEawgQJcgNxawJDyL0cLe_2SIGWu_"/>
+<div class="p-8 space-y-4">
+<h4 class="text-2xl font-bold text-slate-900 leading-tight">Revolutionize Your Workflow with AI.</h4>
+<p class="text-slate-600 leading-relaxed text-sm">
+                                    Stop wasting hours on manual data entry. Our latest update introduces automated synthesis that understands your context better than ever before. Experience the future of work today.
+                                </p>
+<div class="pt-4">
+<button class="w-full py-3 bg-indigo-600 text-white font-bold rounded-lg text-sm shadow-lg shadow-indigo-600/20">Get Started for Free</button>
+</div>
+</div>
+<!-- AI Markers & Tooltips -->
+<!-- Tooltip 1 -->
+<div class="absolute top-44 right-8 group">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white cursor-pointer ring-4 ring-primary/20 animate-pulse">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div class="absolute bottom-full right-0 mb-4 w-48 bg-slate-900 text-white text-[11px] p-3 rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+<div class="font-bold mb-1 text-primary-fixed-dim">Headline Optimization</div>
+                                    "Revolutionize" is a high-performing power word for your segment.
+                                    <div class="absolute w-2 h-2 bg-slate-900 rotate-45 -bottom-1 right-2"></div>
+</div>
+</div>
+<!-- Tooltip 2 -->
+<div class="absolute bottom-40 left-12 group">
+<div class="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-white cursor-pointer ring-4 ring-secondary/20 animate-pulse">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div class="absolute bottom-full left-0 mb-4 w-52 bg-slate-900 text-white text-[11px] p-3 rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+<div class="font-bold mb-1 text-secondary-fixed-dim">Content Clarity</div>
+                                    The sentence "Experience the future of work today" is slightly generic. Suggesting specific outcome-based phrasing.
+                                    <div class="absolute w-2 h-2 bg-slate-900 rotate-45 -bottom-1 left-2"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Strategy & Fixes -->
+<div class="lg:col-span-4 space-y-6">
+<h3 class="text-lg font-bold text-on-surface flex items-center gap-2 px-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+                        Strategy &amp; Fixes
+                    </h3>
+<div class="space-y-4">
+<!-- Strategy Card 1 -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10 shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-3">
+<div class="p-2 bg-primary-fixed rounded-lg text-primary">
+<span class="material-symbols-outlined text-sm">edit</span>
+</div>
+<span class="text-[10px] font-bold text-primary px-2 py-0.5 bg-primary/5 rounded-full uppercase tracking-wider">Tone Shift</span>
+</div>
+<h5 class="font-bold text-on-surface text-sm mb-2">Sharpen Call to Action</h5>
+<p class="text-xs text-on-surface-variant leading-relaxed mb-4">
+                                Change "Get Started for Free" to "Claim Your Free AI Audit" to increase urgency and value perception.
+                            </p>
+<div class="flex gap-2">
+<button class="flex-1 py-2 bg-primary text-white text-[11px] font-bold rounded-lg hover:bg-primary-container transition-colors">Apply</button>
+<button class="px-4 py-2 border border-outline-variant/30 text-on-surface-variant text-[11px] font-bold rounded-lg hover:bg-slate-50 transition-colors">Ignore</button>
+</div>
+</div>
+<!-- Strategy Card 2 -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10 shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-3">
+<div class="p-2 bg-secondary-fixed rounded-lg text-secondary">
+<span class="material-symbols-outlined text-sm">alternate_email</span>
+</div>
+<span class="text-[10px] font-bold text-secondary px-2 py-0.5 bg-secondary/5 rounded-full uppercase tracking-wider">Structure</span>
+</div>
+<h5 class="font-bold text-on-surface text-sm mb-2">Subject Line Variation</h5>
+<p class="text-xs text-on-surface-variant leading-relaxed mb-4">
+                                Current: "New AI Workflow Features". <br/>
+                                Recommended: "AI just solved your data entry headache 🧠"
+                            </p>
+<div class="flex gap-2">
+<button class="flex-1 py-2 bg-secondary text-white text-[11px] font-bold rounded-lg hover:bg-secondary-container transition-colors">Apply</button>
+<button class="px-4 py-2 border border-outline-variant/30 text-on-surface-variant text-[11px] font-bold rounded-lg hover:bg-slate-50 transition-colors">Ignore</button>
+</div>
+</div>
+<!-- Strategy Card 3 -->
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10 shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-3">
+<div class="p-2 bg-tertiary-fixed rounded-lg text-tertiary">
+<span class="material-symbols-outlined text-sm">image</span>
+</div>
+<span class="text-[10px] font-bold text-tertiary px-2 py-0.5 bg-tertiary/5 rounded-full uppercase tracking-wider">Asset</span>
+</div>
+<h5 class="font-bold text-on-surface text-sm mb-2">Hero Image Replacement</h5>
+<p class="text-xs text-on-surface-variant leading-relaxed mb-4">
+                                The current image is high quality but lacks human connection. Replace with a person interacting with the dashboard.
+                            </p>
+<div class="flex gap-2">
+<button class="flex-1 py-2 bg-tertiary text-white text-[11px] font-bold rounded-lg hover:bg-tertiary-container transition-colors">View Library</button>
+</div>
+</div>
+</div>
+<!-- AI Insights Mini Card -->
+<div class="bg-indigo-900 text-white p-6 rounded-xl shadow-lg relative overflow-hidden">
+<span class="material-symbols-outlined absolute -right-4 -bottom-4 text-7xl opacity-10">psychology</span>
+<p class="text-[10px] font-bold uppercase tracking-widest text-indigo-300 mb-2">Pro Tip</p>
+<p class="text-xs font-medium leading-relaxed">
+                            Sending this on a <span class="text-indigo-200 font-bold">Tuesday at 10:15 AM</span> is predicted to increase your open rate by 14.2% based on previous campaign data.
+                        </p>
+</div>
+</div>
+</div>
+</div>
+<section class="mt-10 rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-6 shadow-sm">
+<h3 class="font-headline font-bold text-lg text-on-surface mb-3">Design suggestions (API)</h3>
+<ul id="clarity-design-suggestions-ul" class="list-decimal pl-5 space-y-2 text-sm text-on-surface"></ul>
+</section>
+</main>
+<script>window.CLARITY_API_BASE = window.CLARITY_API_BASE || "http://localhost:3000";</script>
+<script src="js/clarity-workflow-common.js"></script>
+<script src="js/clarity-api.js"></script>
+<script src="js/remaining-pages.js"></script>
+</body></html>

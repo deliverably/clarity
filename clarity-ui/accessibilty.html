@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Deliverably | Accessibility Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "background": "#f9f9ff",
+              "secondary": "#831ada",
+              "on-surface": "#111c2d",
+              "tertiary-fixed-dim": "#89ceff",
+              "surface-tint": "#3e49e2",
+              "on-tertiary": "#ffffff",
+              "on-primary-container": "#d7d8ff",
+              "surface-container-low": "#f0f3ff",
+              "secondary-fixed-dim": "#ddb8ff",
+              "secondary-fixed": "#f0dbff",
+              "on-secondary": "#ffffff",
+              "on-surface-variant": "#464555",
+              "on-error-container": "#93000a",
+              "on-secondary-container": "#fffbff",
+              "primary-fixed-dim": "#bec2ff",
+              "on-error": "#ffffff",
+              "inverse-surface": "#263143",
+              "on-tertiary-container": "#b8e0ff",
+              "tertiary": "#004d70",
+              "surface-variant": "#d8e3fb",
+              "primary-fixed": "#e0e0ff",
+              "on-background": "#111c2d",
+              "tertiary-container": "#006693",
+              "surface-container-lowest": "#ffffff",
+              "surface-bright": "#f9f9ff",
+              "secondary-container": "#9e41f5",
+              "surface-dim": "#cfdaf2",
+              "on-secondary-fixed": "#2c0051",
+              "surface-container": "#e7eeff",
+              "on-tertiary-fixed": "#001e2f",
+              "outline": "#777587",
+              "inverse-primary": "#bec2ff",
+              "surface-container-high": "#dee8ff",
+              "on-tertiary-fixed-variant": "#004c6e",
+              "surface-container-highest": "#d8e3fb",
+              "on-primary-fixed-variant": "#202aca",
+              "surface": "#f9f9ff",
+              "error-container": "#ffdad6",
+              "error": "#ba1a1a",
+              "primary-container": "#404be3",
+              "outline-variant": "#c7c4d8",
+              "on-primary-fixed": "#00026c",
+              "on-primary": "#ffffff",
+              "on-secondary-fixed-variant": "#6800b4",
+              "primary": "#232ccc",
+              "tertiary-fixed": "#c9e6ff",
+              "inverse-on-surface": "#ecf1ff"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c7c4d8;
+            border-radius: 10px;
+        }
+        .glass-panel {
+            backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body antialiased overflow-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl flex justify-between items-center px-8 w-full mx-auto shadow-[0_8px_32px_0_rgba(35,44,204,0.05)]">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-extrabold tracking-tighter text-[#232ccc] dark:text-white">Deliverably</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-slate-500 dark:text-slate-400 font-medium font-['Manrope'] font-bold text-sm tracking-wide uppercase hover:text-[#232ccc] dark:hover:text-white transition-colors duration-300 ease-out" href="#">Dashboard</a>
+<a class="text-[#232ccc] dark:text-[#831ada] border-b-2 border-[#232ccc] pb-1 font-['Manrope'] font-bold text-sm tracking-wide uppercase transition-colors duration-300 ease-out" href="#">Campaigns</a>
+<a class="text-slate-500 dark:text-slate-400 font-medium font-['Manrope'] font-bold text-sm tracking-wide uppercase hover:text-[#232ccc] dark:hover:text-white transition-colors duration-300 ease-out" href="#">Templates</a>
+<a class="text-slate-500 dark:text-slate-400 font-medium font-['Manrope'] font-bold text-sm tracking-wide uppercase hover:text-[#232ccc] dark:hover:text-white transition-colors duration-300 ease-out" href="#">Analytics</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden bg-surface-container-highest">
+<img alt="User profile avatar" data-alt="professional male headshot in studio lighting with a neutral gray background, modern executive portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCULYpm_jvgbkLyR0tkVPymTX5-PWVwqkD-6omaIfFkWXBhCuU96VRdM0VBjyD1D0i0s0xDkxXdbhOQ_d3vhvFnOA4BTwgiQEwJCnjD8_H36aHVCu6ZaHg3RHARztq-4btMUbVr3gEMtWlxDorNG49qCxIEVkcmtbj-wAfX1l0L5nPRdUSqINkbla-QxUOrKzrJgf9UITl2OEq-4SsrOJsGhPDbPu6_j7-T5du8C5Q-8sQICebI5_7SuwmFBgf6VgFHiqInB6JAkaTN"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 pt-20 bg-[#f0f3ff] dark:bg-slate-950 flex flex-col gap-2 p-4 transition-all duration-200 z-40">
+<div class="mb-6 px-2">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined">auto_awesome</span>
+</div>
+<div>
+<h2 class="text-lg font-bold text-[#232ccc] font-['Inter']">Accessibility Hub</h2>
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Prism Ledger System</p>
+</div>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 font-['Inter'] font-medium text-sm hover:bg-white/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Overview</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-900 text-[#232ccc] dark:text-white rounded-l-full shadow-sm font-['Inter'] font-medium text-sm transition-all duration-200" href="#">
+<span class="material-symbols-outlined">visibility</span>
+<span>Accessibility Check</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 font-['Inter'] font-medium text-sm hover:bg-white/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">eye_tracking</span>
+<span>Visual Preview</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 font-['Inter'] font-medium text-sm hover:bg-white/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">checklist</span>
+<span>Checklist</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 font-['Inter'] font-medium text-sm hover:bg-white/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">history</span>
+<span>History</span>
+</a>
+</nav>
+<div class="mt-8 px-2">
+<button class="w-full bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">bolt</span>
+<span>Run New Audit</span>
+</button>
+</div>
+<div class="mt-auto flex flex-col gap-1 border-t border-outline-variant/20 pt-4">
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 font-['Inter'] font-medium text-sm hover:bg-white/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span>Documentation</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 font-['Inter'] font-medium text-sm hover:bg-white/50 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span>Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-16 h-screen flex overflow-hidden">
+<!-- Left Panel: Audit & Compliance -->
+<section class="w-2/5 border-r border-outline-variant/10 flex flex-col bg-surface-container-low">
+<div class="p-8 pb-4">
+<h1 class="font-headline text-2xl font-extrabold text-on-surface tracking-tight">Audit &amp; Compliance</h1>
+<p id="clarity-a11y-meta" class="text-label text-on-surface-variant text-sm mt-1">Run analysis to populate WCAG checks.</p>
+<p id="clarity-a11y-status" class="text-xs text-on-surface-variant mt-2 min-h-[1rem]"></p>
+<div data-clarity-manual-only class="mt-4 space-y-2">
+<textarea id="clarity-a11y-html" rows="5" class="w-full rounded-lg border border-outline-variant/30 bg-white p-2 text-xs font-mono">&lt;html lang=&quot;en&quot;&gt;&lt;body&gt;&lt;img src=&quot;x.png&quot;/&gt;&lt;a href=&quot;#&quot;&gt;click here&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</textarea>
+<div class="flex items-center gap-2">
+<button id="clarity-run-a11y" type="button" class="rounded-lg bg-primary px-3 py-2 text-xs font-bold text-white">Run accessibility audit</button>
+</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-8 pt-2 custom-scrollbar space-y-4">
+<div id="clarity-a11y-cards" class="space-y-4"></div>
+
+</div>
+</section>
+<!-- Right Panel: Simulation Lab -->
+<section class="flex-1 flex flex-col bg-background relative overflow-hidden">
+<!-- Audio Narrator persistent player -->
+<div class="m-8 mb-4 glass-panel rounded-2xl p-4 flex items-center justify-between border border-white/40 shadow-xl">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-white">
+<span class="material-symbols-outlined">text_to_speech</span>
+</div>
+<div>
+<span class="text-[10px] font-bold text-primary uppercase tracking-widest">Audio Narrator</span>
+<h4 class="text-sm font-bold text-on-surface">Screen Reader Simulation Active</h4>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-sm">skip_previous</span>
+</button>
+<button class="w-10 h-10 bg-on-surface text-white rounded-full flex items-center justify-center hover:scale-105 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-sm">skip_next</span>
+</button>
+<div class="w-32 h-1 bg-surface-container-highest rounded-full ml-4 overflow-hidden relative">
+<div class="absolute inset-y-0 left-0 w-1/3 bg-primary"></div>
+</div>
+</div>
+<div class="flex items-center gap-4 border-l border-outline-variant/30 pl-4">
+<span class="text-xs font-mono text-on-surface-variant">0:24 / 3:15</span>
+<button class="p-2 rounded-lg hover:bg-surface-container text-on-surface-variant">
+<span class="material-symbols-outlined text-lg">closed_caption</span>
+</button>
+</div>
+</div>
+<!-- Simulation Controls Toggles -->
+<div class="px-8 flex items-center gap-2 mb-4 overflow-x-auto custom-scrollbar pb-2">
+<button class="flex items-center gap-2 px-4 py-2 bg-primary-container text-white rounded-full text-xs font-bold shrink-0 shadow-lg shadow-primary/10">
+<span class="material-symbols-outlined text-sm">visibility</span>
+                    Standard View
+                </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest text-on-surface-variant rounded-full text-xs font-bold border border-outline-variant/20 shrink-0 hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-sm">blur_on</span>
+                    Low Vision (Blur)
+                </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest text-on-surface-variant rounded-full text-xs font-bold border border-outline-variant/20 shrink-0 hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-sm">palette</span>
+                    Protanopia
+                </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest text-on-surface-variant rounded-full text-xs font-bold border border-outline-variant/20 shrink-0 hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-sm">contrast</span>
+                    High Contrast
+                </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest text-on-surface-variant rounded-full text-xs font-bold border border-outline-variant/20 shrink-0 hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-sm">zoom_in</span>
+                    200% Zoom
+                </button>
+</div>
+<!-- Email Preview Area -->
+<div class="flex-1 px-8 pb-8">
+<div class="w-full h-full bg-white rounded-3xl shadow-inner border border-outline-variant/20 overflow-hidden relative group">
+<!-- Overlay Mask for simulation (Simulated Protanopia for demo) -->
+<div class="absolute inset-0 bg-transparent pointer-events-none transition-opacity"></div>
+<div class="w-full h-full overflow-y-auto custom-scrollbar p-12">
+<div class="max-w-2xl mx-auto space-y-8">
+<div class="text-center space-y-4">
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">Internal Preview</span>
+<h2 class="text-4xl font-headline font-extrabold text-on-surface leading-tight">Revolutionizing Digital Workflow with Deliverably 2.0</h2>
+</div>
+<img alt="Campaign Hero Image" class="w-full h-64 object-cover rounded-2xl shadow-lg" data-alt="conceptual technology landscape with abstract blue circuits and floating futuristic interface elements, soft atmospheric lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAefKtaTtxHyDVmWXok_EP_SpS7zI8-YFntzgeJbADNI2I6Zwm-NwvbBj1mM-0xqX-Y-PeK-HiS2Ziq8WanjCF8rB4fclYChkHM1TvG0rbwPvAyJ96mED2JzP06lAuovZQTwXg5KfAXYJtrrr11ShIVjHXB_Q4PZgViEj5qkVifnW9q6pB4_M4mq5vNVbdOxDu6DXvIV8-UOdMIV1yijjZxpzoJoEUMcan9OqNR_U6aDgC0MX3eN7jxMR1-Du98GoTo_BEhsvheb7fb"/>
+<div class="space-y-4 text-on-surface-variant leading-relaxed text-lg">
+<p>We are thrilled to announce the next evolution of our platform. Deliverably 2.0 isn't just an update—it's a reimagining of how teams interact with data, campaigns, and their customers.</p>
+<p>Our new <strong>Luminous Interface</strong> uses advanced tonal shifts and atmospheric depth to guide your eye to what matters most, reducing cognitive load and increasing productivity by up to 40%.</p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-6 rounded-2xl border border-primary/10">
+<h5 class="font-bold text-primary mb-2">Smart Analytics</h5>
+<p class="text-sm text-on-surface-variant">Real-time tracking with predictive modeling for every interaction.</p>
+</div>
+<div class="bg-surface-container-low p-6 rounded-2xl border border-primary/10">
+<h5 class="font-bold text-secondary mb-2">Automated Flows</h5>
+<p class="text-sm text-on-surface-variant">Drag-and-drop journey builder with AI-powered suggestions.</p>
+</div>
+</div>
+<div class="pt-8 text-center">
+<button class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-lg shadow-xl shadow-primary/20 hover:scale-105 transition-transform">
+                                    Upgrade to 2.0 Now
+                                </button>
+<p class="text-[10px] text-on-surface-variant mt-4">Free trial available for all Enterprise accounts until December 31st.</p>
+</div>
+</div>
+</div>
+<!-- Magnifier simulation overlay component (Floating) -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full border-4 border-white shadow-2xl pointer-events-none flex items-center justify-center bg-white/10 backdrop-blur-sm overflow-hidden border-opacity-50">
+<div class="text-[10px] bg-on-surface text-white px-2 py-1 rounded-full font-bold">Focus Point</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Contextual FAB (Suppressed as per rules for Details/Settings view, but this is a Dashboard-like Hub) -->
+<div class="fixed bottom-8 right-8 z-50">
+<button class="w-14 h-14 bg-gradient-to-br from-secondary to-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all group">
+<span class="material-symbols-outlined text-3xl group-hover:rotate-12 transition-transform">share</span>
+</button>
+</div>
+<script>window.CLARITY_API_BASE = window.CLARITY_API_BASE || "http://localhost:3000";</script>
+<script src="js/clarity-workflow-common.js"></script>
+<script src="js/clarity-api.js"></script>
+<script src="js/remaining-pages.js"></script>
+</body></html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Clarity — Design workspace</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+  body { font-family: Inter, system-ui, sans-serif; }
+  h1, h2, h3 { font-family: Manrope, system-ui, sans-serif; }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen">
+<header class="border-b border-slate-200 bg-white">
+  <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center text-white font-black text-sm">C</div>
+      <div>
+        <h1 class="text-lg font-extrabold text-indigo-900 leading-tight">Clarity</h1>
+        <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-500">One HTML drives every module</p>
+      </div>
+    </div>
+    <p class="hidden sm:block text-xs text-slate-500 max-w-md text-right">
+      Matches <code class="bg-slate-100 px-1 rounded">clarity_architecture_flow.svg</code>: save finishes upload → analyses run in sequence.
+    </p>
+  </div>
+</header>
+
+<!-- Home: main page -->
+<div id="clarity-view-home" class="max-w-6xl mx-auto px-4 py-8">
+  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm mb-8">
+    <h2 class="text-xl font-extrabold text-slate-900 mb-1">Main page</h2>
+    <p class="text-sm text-slate-600 mb-4">Paste HTML, upload <span class="font-mono text-xs">.html</span> / <span class="font-mono text-xs">.eml</span>, name the design, then save. Module APIs run one after another as soon as the design is saved.</p>
+    <div class="rounded-xl border border-indigo-100 bg-indigo-50/60 p-4 mb-6 text-sm text-slate-700">
+      <p class="font-bold text-indigo-900 mb-1">Main layout &amp; adjustment workflow</p>
+      <p class="text-xs text-slate-600 mb-2">Use these reference shells when aligning hero blocks, list density, or image-led layouts before you paste final HTML into the workspace.</p>
+      <div class="flex flex-wrap gap-3 text-xs font-semibold">
+        <a class="text-indigo-700 hover:underline" href="main_list.html">List-led main page</a>
+        <span class="text-slate-300">·</span>
+        <a class="text-indigo-700 hover:underline" href="main_image.html">Image-led main page</a>
+      </div>
+    </div>
+    <div class="grid gap-6 md:grid-cols-3">
+      <div class="md:col-span-2 space-y-3">
+        <label class="text-xs font-bold uppercase text-slate-500">Upload / paste HTML</label>
+        <textarea id="clarity-input-html" rows="12" class="w-full rounded-xl border border-slate-200 p-3 text-xs font-mono focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500" placeholder="&lt;html&gt;…&lt;/html&gt;"></textarea>
+        <div class="flex flex-wrap items-center gap-2">
+          <input id="clarity-file-input" type="file" accept=".html,.htm,.eml,text/html,text/plain" class="hidden"/>
+          <button type="button" id="clarity-btn-pick-file" class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Choose file</button>
+          <span class="text-xs text-slate-500">HTML or EML</span>
+        </div>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="text-xs font-bold uppercase text-slate-500">Name the design</label>
+          <input id="clarity-design-name" type="text" class="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm" placeholder="Spring promo / Q4 newsletter…"/>
+          <p class="text-[10px] text-slate-500 mt-1">Defaults to subject or title from HTML.</p>
+        </div>
+        <button type="button" id="clarity-btn-save" class="w-full rounded-xl bg-indigo-600 px-4 py-3 text-sm font-bold text-white shadow-md shadow-indigo-600/20 hover:bg-indigo-700 transition">
+          Save design &amp; run all modules
+        </button>
+        <p id="clarity-save-status" class="text-xs text-amber-700 font-medium min-h-[1rem]"></p>
+        <div id="clarity-gate-note" class="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
+          <strong>No HTML?</strong> Save stays disabled until there is markup — the analysis modules stay gated until a design exists.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-extrabold text-slate-900">Saved designs</h2>
+      <span class="text-xs text-slate-500">Each keeps its own analysis state (local)</span>
+    </div>
+    <div id="clarity-designs-list" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+  </section>
+</div>
+
+<!-- Studio: open design -->
+<div id="clarity-view-studio" class="hidden max-w-6xl mx-auto px-4 py-6">
+  <div class="flex items-center gap-3 mb-6">
+    <button type="button" id="clarity-btn-back" class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">← Home</button>
+    <div>
+      <h2 class="text-xl font-extrabold text-slate-900">Design workspace</h2>
+      <p id="clarity-studio-subtitle" class="text-xs text-slate-600 mt-0.5"></p>
+    </div>
+  </div>
+  <div class="max-w-4xl">
+    <h3 class="text-xs font-bold uppercase text-slate-500 mb-3">Clarity modules</h3>
+    <p class="text-[11px] text-slate-500 mb-3">Started when you saved. When a tile shows ✓, click it to open that module’s full UI in a new tab — paste/run fields are hidden there because this design already supplied the content.</p>
+    <div id="clarity-module-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+  </div>
+</div>
+
+<footer class="max-w-6xl mx-auto px-4 py-8 text-center text-[11px] text-slate-400 border-t border-slate-200 mt-8">
+  Standalone pages (grammar, links, …) remain available. Deep-dive UIs: see <a class="text-indigo-600 hover:underline" href="README.md">README</a>.
+</footer>
+
+<script>
+  window.CLARITY_API_BASE = window.CLARITY_API_BASE || "http://localhost:3000";
+  /* Optional: ms after each module finishes before starting the next. Default 3000. Set 0 to remove the pause (still sequential, one in-flight at a time). */
+  // window.CLARITY_ANALYSIS_STAGGER_MS = 0;
+</script>
+<script src="js/clarity-workflow-common.js"></script>
+<script src="js/clarity-api.js"></script>
+<script src="js/clarity-app.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Clarity — Performance / Keywords / Heatmap</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;800&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<style>
+  body { font-family: Inter, sans-serif; }
+  h1 { font-family: Manrope, sans-serif; }
+  html.clarity-workflow-mode #perf-out,
+  html.clarity-workflow-mode #kw-out,
+  html.clarity-workflow-mode #heat-out { display: none; }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen p-8">
+<h1 class="text-2xl font-extrabold text-indigo-700 mb-6">Clarity — Forecasts &amp; heatmap</h1>
+<div class="flex gap-2 mb-4">
+<button type="button" data-tab="perf" class="tab-btn rounded-lg bg-indigo-600 text-white px-4 py-2 text-sm font-bold">Open &amp; CTR</button>
+<button type="button" data-tab="kw" class="tab-btn rounded-lg bg-white border px-4 py-2 text-sm font-semibold">Keywords</button>
+<button type="button" data-tab="heat" class="tab-btn rounded-lg bg-white border px-4 py-2 text-sm font-semibold">Heatmap</button>
+</div>
+<section id="panel-perf" class="panel space-y-3 max-w-3xl">
+<div data-clarity-manual-only class="space-y-3">
+<label class="text-xs font-bold uppercase text-slate-500">Subject</label>
+<input id="perf-subject" class="w-full rounded border p-2 text-sm" value="Your spring savings inside"/>
+<label class="text-xs font-bold uppercase text-slate-500">Preview</label>
+<input id="perf-preview" class="w-full rounded border p-2 text-sm" value="20% off ends Sunday"/>
+<label class="text-xs font-bold uppercase text-slate-500">Email content</label>
+<textarea id="perf-body" rows="5" class="w-full rounded border p-2 text-sm">Short body with a clear CTA.</textarea>
+<label class="text-xs font-bold uppercase text-slate-500">Industry</label>
+<input id="perf-industry" class="w-full rounded border p-2 text-sm" value="E-commerce"/>
+<button id="perf-run" type="button" class="rounded-lg bg-indigo-600 text-white px-4 py-2 text-sm font-bold">Run performance</button>
+</div>
+<div id="clarity-perf-ui" class="hidden mt-4 rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-800 space-y-2"></div>
+<pre id="perf-out" class="mt-4 bg-white border rounded p-4 text-xs overflow-auto max-h-96"></pre>
+</section>
+<section id="panel-kw" class="panel hidden space-y-3 max-w-3xl">
+<div data-clarity-manual-only class="space-y-3">
+<label class="text-xs font-bold uppercase text-slate-500">Sector (or Auto-detect)</label>
+<input id="kw-sector" class="w-full rounded border p-2 text-sm" value="Auto-detect"/>
+<textarea id="kw-body" rows="6" class="w-full rounded border p-2 text-sm">SaaS platform for teams. Start your free trial today.</textarea>
+<button id="kw-run" type="button" class="rounded-lg bg-indigo-600 text-white px-4 py-2 text-sm font-bold">Run keywords</button>
+</div>
+<div id="clarity-kw-ui" class="hidden mt-4 rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-800 space-y-2"></div>
+<pre id="kw-out" class="mt-4 bg-white border rounded p-4 text-xs overflow-auto max-h-96"></pre>
+</section>
+<section id="panel-heat" class="panel hidden space-y-3 max-w-3xl">
+<div data-clarity-manual-only class="space-y-3">
+<textarea id="heat-html" rows="6" class="w-full rounded border p-2 text-xs font-mono">&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;h1&gt;Hero&lt;/h1&gt;&lt;a href=&quot;#&quot;&gt;CTA&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</textarea>
+<input id="heat-segment" class="w-full rounded border p-2 text-sm" placeholder="Segment (optional)" value="none"/>
+<button id="heat-run" type="button" class="rounded-lg bg-indigo-600 text-white px-4 py-2 text-sm font-bold">Run heatmap</button>
+</div>
+<div id="clarity-heat-ui" class="hidden mt-4 rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-800 space-y-3"></div>
+<pre id="heat-out" class="mt-4 bg-white border rounded p-4 text-xs overflow-auto max-h-96"></pre>
+</section>
+<p id="multi-status" class="text-xs text-slate-500 mt-4"></p>
+<script>window.CLARITY_API_BASE = window.CLARITY_API_BASE || "http://localhost:3000";</script>
+<script src="js/clarity-workflow-common.js"></script>
+<script src="js/clarity-api.js"></script>
+<script src="js/remaining-pages.js"></script>
+</body>
+</html>
