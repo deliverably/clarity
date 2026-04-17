@@ -7,9 +7,17 @@
       .replace(/"/g, "&quot;");
   }
 
+  /** Last path segment, lowercased (handles trailing slash; may omit .html depending on server). */
   function pageName() {
-    var p = (location.pathname || "").split("/").pop() || "";
-    return p.toLowerCase();
+    var path = String(location.pathname || "").replace(/\/+$/, "");
+    var parts = path.split("/").filter(function (s) {
+      return s;
+    });
+    return (parts.pop() || "").toLowerCase();
+  }
+
+  function pageKey() {
+    return pageName().replace(/\.html$/i, "");
   }
 
   function bindSpamRunners(fn) {
@@ -20,7 +28,47 @@
     });
   }
 
-  function renderSpamListFromData(data, email, totalEl, metaEl, tbody) {
+  var SPAM_LIST_PAGE_SIZE = 10;
+
+  function spamTriggersSorted(triggers) {
+    return (triggers || []).slice().sort(function (a, b) {
+      return String(b.word || "").length - String(a.word || "").length;
+    });
+  }
+
+  /** Ordered global replace; same approach for plain text and HTML (may alter URLs/markup if a word matches inside tags). */
+  function applyTriggersToPlainOrHtml(text, triggers) {
+    var v = String(text || "");
+    spamTriggersSorted(triggers).forEach(function (t) {
+      if (t.word && t.replacement != null) v = v.split(t.word).join(t.replacement);
+    });
+    return v;
+  }
+
+  function plainFromHtml(html) {
+    var d = document.createElement("div");
+    d.innerHTML = html || "";
+    var t = (d.textContent || "").replace(/\s+/g, " ").trim();
+    return t.length ? t : " ";
+  }
+
+  function persistSpamWorkflowEdits(html, plainText, statusEl) {
+    if (typeof window.clarityWorkflowActive !== "function" || !window.clarityWorkflowActive()) return false;
+    var bundle = window.clarityReadWorkflowBundle && window.clarityReadWorkflowBundle();
+    if (!bundle || !bundle.designId) return false;
+    bundle.html = html;
+    bundle.plainText = plainText;
+    var ok = window.clarityWriteWorkflowBundle && window.clarityWriteWorkflowBundle(bundle);
+    var patched =
+      window.clarityPatchDesignById &&
+      window.clarityPatchDesignById(bundle.designId, { html: html, plainText: plainText });
+    if (statusEl) {
+      statusEl.textContent = ok && patched ? "Saved to workspace design." : "Could not save to workspace (storage).";
+    }
+    return !!(ok && patched);
+  }
+
+  function updateSpamSummaryElements(data, totalEl, metaEl) {
     var sum = data.summary || {};
     if (totalEl) totalEl.textContent = String(sum.total_triggers ?? 0);
     if (metaEl) {
@@ -31,30 +79,6 @@
         " — " +
         (sum.deliverability_impact || "");
     }
-    if (tbody) {
-      tbody.innerHTML = "";
-      (data.triggers || []).forEach(function (t) {
-        var tr = document.createElement("tr");
-        tr.className = "hover:bg-surface-container-low/50 transition-colors";
-        tr.innerHTML =
-          '<td class="px-8 py-5"><div class="flex items-center gap-3"><span class="w-2 h-2 rounded-full ' +
-          (t.risk === "high" ? "bg-error" : t.risk === "medium" ? "bg-amber-500" : "bg-slate-300") +
-          '"></span><span class="font-semibold text-on-surface">' +
-          esc(t.word) +
-          '</span></div><p class="text-xs text-on-surface-variant mt-1">' +
-          esc(t.context) +
-          "</p></td>" +
-          '<td class="px-8 py-5"><span class="px-3 py-1.5 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-lg font-medium text-sm">' +
-          esc(t.replacement) +
-          "</span></td>" +
-          '<td class="px-8 py-5 text-right"><button type="button" class="clarity-spam-apply text-primary font-bold text-sm hover:underline">Apply</button></td>';
-        tr.querySelector(".clarity-spam-apply").addEventListener("click", function () {
-          if (!email || !t.word) return;
-          email.value = email.value.split(t.word).join(t.replacement || "");
-        });
-        tbody.appendChild(tr);
-      });
-    }
   }
 
   function initSpamList() {
@@ -64,6 +88,158 @@
     var meta = document.getElementById("clarity-spam-risk-meta");
     var status = document.getElementById("clarity-spam-status");
     var applyAll = document.getElementById("clarity-spam-apply-all");
+    var pageInfo = document.getElementById("clarity-spam-page-info");
+    var pager = document.getElementById("clarity-spam-pager");
+    var pagerPages = document.getElementById("clarity-spam-pager-pages");
+    var pagerPrev = document.getElementById("clarity-spam-pager-prev");
+    var pagerNext = document.getElementById("clarity-spam-pager-next");
+    var btnViewList = document.getElementById("clarity-spam-view-list");
+    var btnViewImage = document.getElementById("clarity-spam-view-image");
+
+    var listState = { data: null, pageIndex: 0 };
+
+    function workflowBundle() {
+      return typeof window.clarityReadWorkflowBundle === "function" ? window.clarityReadWorkflowBundle() : null;
+    }
+
+    function currentPlainAndHtml() {
+      var b = workflowBundle();
+      var plain = (email && email.value) || "";
+      var htmlStr = (b && b.html) || "";
+      if (typeof window.clarityWorkflowActive === "function" && window.clarityWorkflowActive() && b) {
+        plain = plain || (b.plainText != null ? String(b.plainText) : "");
+        htmlStr = htmlStr || "";
+      }
+      return { bundle: b, plain: plain, html: htmlStr };
+    }
+
+    function paintSpamListPage() {
+      var data = listState.data;
+      if (!tbody) return;
+      tbody.innerHTML = "";
+      if (!data) {
+        if (pageInfo) pageInfo.textContent = "";
+        if (pager) pager.classList.add("hidden");
+        return;
+      }
+      updateSpamSummaryElements(data, totalEl, meta);
+      var triggers = data.triggers || [];
+      var total = triggers.length;
+      var pageSize = SPAM_LIST_PAGE_SIZE;
+      var pageCount = total === 0 ? 1 : Math.ceil(total / pageSize);
+      if (listState.pageIndex >= pageCount) listState.pageIndex = Math.max(0, pageCount - 1);
+      var start = listState.pageIndex * pageSize;
+      var slice = triggers.slice(start, start + pageSize);
+
+      if (total === 0) {
+        var empty = document.createElement("tr");
+        empty.innerHTML =
+          '<td colspan="3" class="px-8 py-8 text-center text-sm text-on-surface-variant">No spam triggers in this analysis.</td>';
+        tbody.appendChild(empty);
+      } else {
+        slice.forEach(function (t) {
+          var tr = document.createElement("tr");
+          tr.className = "hover:bg-surface-container-low/50 transition-colors";
+          tr.innerHTML =
+            '<td class="px-8 py-5"><div class="flex items-center gap-3"><span class="w-2 h-2 rounded-full ' +
+            (t.risk === "high" ? "bg-error" : t.risk === "medium" ? "bg-amber-500" : "bg-slate-300") +
+            '"></span><span class="font-semibold text-on-surface">' +
+            esc(t.word) +
+            '</span></div><p class="text-xs text-on-surface-variant mt-1">' +
+            esc(t.context) +
+            "</p></td>" +
+            '<td class="px-8 py-5"><span class="px-3 py-1.5 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-lg font-medium text-sm">' +
+            esc(t.replacement) +
+            "</span></td>" +
+            '<td class="px-8 py-5 text-right"><button type="button" class="clarity-spam-apply text-primary font-bold text-sm hover:underline">Apply</button></td>';
+          tr.querySelector(".clarity-spam-apply").addEventListener("click", function () {
+            if (!email || !t.word) return;
+            var bBefore = workflowBundle();
+            var oldHtml = (bBefore && bBefore.html) || "";
+            email.value = email.value.split(t.word).join(t.replacement || "");
+            var newPlain = email.value;
+            var newHtml = oldHtml ? oldHtml.split(t.word).join(t.replacement || "") : newPlain;
+            if (bBefore && typeof window.clarityWorkflowActive === "function" && window.clarityWorkflowActive()) {
+              persistSpamWorkflowEdits(newHtml, newPlain, status);
+            }
+          });
+          tbody.appendChild(tr);
+        });
+      }
+
+      if (pageInfo) {
+        if (total === 0) pageInfo.textContent = "No results";
+        else if (total <= pageSize) pageInfo.textContent = "Showing all " + total + " results";
+        else pageInfo.textContent = "Showing " + slice.length + " of " + total + " results";
+      }
+
+      if (pager) {
+        if (total <= pageSize || total === 0) {
+          pager.classList.add("hidden");
+        } else {
+          pager.classList.remove("hidden");
+          if (pagerPrev) pagerPrev.disabled = listState.pageIndex <= 0;
+          if (pagerNext) pagerNext.disabled = listState.pageIndex >= pageCount - 1;
+          if (pagerPages) {
+            pagerPages.innerHTML = "";
+            for (var p = 0; p < pageCount; p++) {
+              (function (pageIdx) {
+                var btn = document.createElement("button");
+                btn.type = "button";
+                btn.textContent = String(pageIdx + 1);
+                btn.className =
+                  "w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold transition-all " +
+                  (listState.pageIndex === pageIdx
+                    ? "bg-primary text-white"
+                    : "text-on-surface-variant hover:bg-surface-container-high");
+                btn.addEventListener("click", function () {
+                  listState.pageIndex = pageIdx;
+                  paintSpamListPage();
+                });
+                pagerPages.appendChild(btn);
+              })(p);
+            }
+          }
+        }
+      }
+    }
+
+    function setSpamListData(data) {
+      listState.data = data;
+      listState.pageIndex = 0;
+      paintSpamListPage();
+    }
+
+    if (pagerPrev) {
+      pagerPrev.addEventListener("click", function () {
+        if (listState.pageIndex > 0) {
+          listState.pageIndex--;
+          paintSpamListPage();
+        }
+      });
+    }
+    if (pagerNext) {
+      pagerNext.addEventListener("click", function () {
+        var triggers = (listState.data && listState.data.triggers) || [];
+        var pageCount = triggers.length === 0 ? 1 : Math.ceil(triggers.length / SPAM_LIST_PAGE_SIZE);
+        if (listState.pageIndex < pageCount - 1) {
+          listState.pageIndex++;
+          paintSpamListPage();
+        }
+      });
+    }
+
+    if (btnViewImage) {
+      btnViewImage.addEventListener("click", function () {
+        window.location.href = "spamtrigger_visual.html" + window.location.search;
+      });
+    }
+    if (btnViewList) {
+      btnViewList.addEventListener("click", function () {
+        var el = document.getElementById("clarity-spam-detected");
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
 
     async function run() {
       if (status) status.textContent = "Analyzing…";
@@ -71,7 +247,7 @@
         var data = await window.ClarityAPI.runAnalysis("spam", {
           emailContent: (email && email.value) || "",
         });
-        renderSpamListFromData(data, email, totalEl, meta, tbody);
+        setSpamListData(data);
         if (status) status.textContent = "Done.";
       } catch (e) {
         if (status) status.textContent = e.message || String(e);
@@ -82,24 +258,65 @@
     if (applyAll && email) {
       applyAll.addEventListener("click", async function () {
         try {
-          var data = await window.ClarityAPI.runAnalysis("spam", { emailContent: email.value || "" });
-          var v = email.value;
-          (data.triggers || []).forEach(function (t) {
-            if (t.word && t.replacement) v = v.split(t.word).join(t.replacement);
-          });
-          email.value = v;
+          var data = listState.data;
+          var wf =
+            typeof window.clarityWorkflowActive === "function" &&
+            window.clarityWorkflowActive() &&
+            workflowBundle() &&
+            workflowBundle().analysis &&
+            workflowBundle().analysis.spam &&
+            workflowBundle().analysis.spam.status === "done";
+          if (wf) {
+            data = workflowBundle().analysis.spam.data;
+          } else {
+            data = await window.ClarityAPI.runAnalysis("spam", { emailContent: email.value || "" });
+            setSpamListData(data);
+          }
+          if (!data || !data.triggers) return;
+          var ctx = currentPlainAndHtml();
+          var newPlain = applyTriggersToPlainOrHtml(ctx.plain, data.triggers);
+          var newHtml = applyTriggersToPlainOrHtml(ctx.html || ctx.plain, data.triggers);
+          email.value = newPlain;
+          if (wf) persistSpamWorkflowEdits(newHtml, newPlain, status);
+          else if (status) status.textContent = "Applied all suggestions to text.";
         } catch (e) {
-          alert(e.message || String(e));
+          window.alert(e.message || String(e));
         }
       });
     }
 
     if (typeof window.clarityWorkflowActive === "function" && window.clarityWorkflowActive()) {
-      var bundle = window.clarityReadWorkflowBundle && window.clarityReadWorkflowBundle();
-      if (bundle && bundle.analysis && bundle.analysis.spam && bundle.analysis.spam.status === "done" && bundle.analysis.spam.data) {
+      var params = new URLSearchParams(location.search || "");
+      var designId = params.get("designId");
+      var bundle = workflowBundle();
+      var spamReady =
+        bundle &&
+        bundle.analysis &&
+        bundle.analysis.spam &&
+        bundle.analysis.spam.status === "done" &&
+        bundle.analysis.spam.data;
+      if (
+        !spamReady &&
+        designId &&
+        typeof window.clarityHydrateSessionFromDesignId === "function" &&
+        window.clarityHydrateSessionFromDesignId(designId)
+      ) {
+        bundle = workflowBundle();
+        spamReady =
+          bundle &&
+          bundle.analysis &&
+          bundle.analysis.spam &&
+          bundle.analysis.spam.status === "done" &&
+          bundle.analysis.spam.data;
+      }
+      if (spamReady) {
         if (email && bundle.plainText != null) email.value = bundle.plainText;
-        renderSpamListFromData(bundle.analysis.spam.data, email, totalEl, meta, tbody);
+        setSpamListData(bundle.analysis.spam.data);
         if (status) status.textContent = "Loaded from workspace.";
+      } else if (status) {
+        status.textContent = designId
+          ? "Could not load this design, or spam analysis is not finished yet."
+          : "No session data in this tab. Open the module again from the workspace (links include your design id).";
       }
     }
   }
@@ -120,21 +337,41 @@
     return out;
   }
 
-  function renderSpamVisualFromData(data, email) {
+  function renderSpamVisualFromData(data, email, opts) {
+    opts = opts || {};
+    var bundle = opts.bundle;
+    var previewSource =
+      bundle && bundle.html ? plainFromHtml(bundle.html) : (email && email.value) || "";
     var body = document.getElementById("clarity-spam-visual-body");
     var cards = document.getElementById("clarity-spam-visual-cards");
     var countEl = document.getElementById("clarity-spam-visual-count");
-    var n = (data.summary && data.summary.total_triggers) || 0;
+    var sum = data.summary || {};
+    var n = sum.total_triggers != null ? sum.total_triggers : (data.triggers || []).length;
     if (countEl) countEl.textContent = String(n) + " Spam Words Found";
+    var pctEl = document.getElementById("clarity-spam-visual-health-pct");
+    var barEl = document.getElementById("clarity-spam-visual-health-bar");
+    var copyEl = document.getElementById("clarity-spam-visual-health-copy");
+    if (pctEl) {
+      if (sum.spam_score != null) pctEl.textContent = String(sum.spam_score) + "%";
+      else pctEl.textContent = "—";
+    }
+    if (barEl) {
+      if (sum.spam_score != null) barEl.style.width = Math.min(100, Math.max(0, sum.spam_score)) + "%";
+      else barEl.style.width = "0%";
+    }
+    if (copyEl) {
+      var line = ((sum.risk_level ? "Risk: " + sum.risk_level + ". " : "") + (sum.deliverability_impact || "")).trim();
+      copyEl.textContent = line || "Spam score and risk appear here after analysis.";
+    }
     if (body) {
       body.innerHTML =
         '<div class="prose prose-sm max-w-none text-slate-700 leading-relaxed">' +
-        highlightText((email && email.value) || "", data.triggers || []) +
+        highlightText(previewSource, data.triggers || []) +
         "</div>";
     }
     if (cards) {
       cards.innerHTML = "";
-      (data.triggers || []).slice(0, 8).forEach(function (t) {
+      (data.triggers || []).forEach(function (t) {
         var div = document.createElement("div");
         div.className = "p-4 bg-surface-container-lowest rounded-xl border-l-4 border-error shadow-sm";
         div.innerHTML =
@@ -155,6 +392,20 @@
         div.querySelector(".clarity-repl").addEventListener("click", function () {
           if (!email || !t.word) return;
           email.value = email.value.split(t.word).join(t.replacement || "");
+          var b =
+            typeof window.clarityReadWorkflowBundle === "function" ? window.clarityReadWorkflowBundle() : null;
+          if (
+            b &&
+            typeof window.clarityWorkflowActive === "function" &&
+            window.clarityWorkflowActive() &&
+            b.designId
+          ) {
+            var newPlain = email.value;
+            var newHtml = (b.html || "").split(t.word).join(t.replacement || "");
+            persistSpamWorkflowEdits(newHtml, newPlain, document.getElementById("clarity-spam-status"));
+            var b2 = window.clarityReadWorkflowBundle && window.clarityReadWorkflowBundle();
+            renderSpamVisualFromData(data, email, { bundle: b2 });
+          }
         });
         cards.appendChild(div);
       });
@@ -164,6 +415,40 @@
   function initSpamVisual() {
     var email = document.getElementById("clarity-spam-email");
     var status = document.getElementById("clarity-spam-status");
+    var visualDataRef = { data: null, bundle: null };
+
+    var btnSource = document.getElementById("clarity-spam-visual-source");
+    if (btnSource) {
+      btnSource.addEventListener("click", function () {
+        window.location.href = "spamtrigger_list.html" + window.location.search;
+      });
+    }
+    var btnAuto = document.getElementById("clarity-spam-visual-auto-replace");
+    if (btnAuto && email) {
+      btnAuto.addEventListener("click", function () {
+        var data = visualDataRef.data;
+        if (!data || !data.triggers) return;
+        var low = (data.triggers || []).filter(function (t) {
+          return t.risk === "low";
+        });
+        if (!low.length) {
+          if (status) status.textContent = "No low-risk triggers to replace.";
+          return;
+        }
+        var b =
+          typeof window.clarityReadWorkflowBundle === "function" ? window.clarityReadWorkflowBundle() : null;
+        var plain = (email && email.value) || (b && b.plainText) || "";
+        var htmlStr = (b && b.html) || plain;
+        var newPlain = applyTriggersToPlainOrHtml(plain, low);
+        var newHtml = applyTriggersToPlainOrHtml(htmlStr, low);
+        email.value = newPlain;
+        if (b && typeof window.clarityWorkflowActive === "function" && window.clarityWorkflowActive()) {
+          persistSpamWorkflowEdits(newHtml, newPlain, status);
+          var b2 = window.clarityReadWorkflowBundle && window.clarityReadWorkflowBundle();
+          renderSpamVisualFromData(data, email, { bundle: b2 });
+        } else if (status) status.textContent = "Applied low-risk replacements.";
+      });
+    }
 
     async function run() {
       if (status) status.textContent = "Analyzing…";
@@ -171,7 +456,9 @@
         var data = await window.ClarityAPI.runAnalysis("spam", {
           emailContent: (email && email.value) || "",
         });
-        renderSpamVisualFromData(data, email);
+        visualDataRef.data = data;
+        visualDataRef.bundle = null;
+        renderSpamVisualFromData(data, email, {});
         if (status) status.textContent = "Done.";
       } catch (e) {
         if (status) status.textContent = e.message || String(e);
@@ -180,11 +467,39 @@
     bindSpamRunners(run);
 
     if (typeof window.clarityWorkflowActive === "function" && window.clarityWorkflowActive()) {
+      var params = new URLSearchParams(location.search || "");
+      var designId = params.get("designId");
       var bundle = window.clarityReadWorkflowBundle && window.clarityReadWorkflowBundle();
-      if (bundle && bundle.analysis && bundle.analysis.spam && bundle.analysis.spam.status === "done" && bundle.analysis.spam.data) {
+      var spamReady =
+        bundle &&
+        bundle.analysis &&
+        bundle.analysis.spam &&
+        bundle.analysis.spam.status === "done" &&
+        bundle.analysis.spam.data;
+      if (
+        !spamReady &&
+        designId &&
+        typeof window.clarityHydrateSessionFromDesignId === "function" &&
+        window.clarityHydrateSessionFromDesignId(designId)
+      ) {
+        bundle = window.clarityReadWorkflowBundle && window.clarityReadWorkflowBundle();
+        spamReady =
+          bundle &&
+          bundle.analysis &&
+          bundle.analysis.spam &&
+          bundle.analysis.spam.status === "done" &&
+          bundle.analysis.spam.data;
+      }
+      if (spamReady) {
         if (email && bundle.plainText != null) email.value = bundle.plainText;
-        renderSpamVisualFromData(bundle.analysis.spam.data, email);
+        visualDataRef.data = bundle.analysis.spam.data;
+        visualDataRef.bundle = bundle;
+        renderSpamVisualFromData(bundle.analysis.spam.data, email, { bundle: bundle });
         if (status) status.textContent = "Loaded from workspace.";
+      } else if (status) {
+        status.textContent = designId
+          ? "Could not load this design, or spam analysis is not finished yet."
+          : "No session data in this tab. Open from the workspace so the URL includes your design id.";
       }
     }
   }
@@ -603,12 +918,12 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    var n = pageName();
-    if (n === "spamtrigger_list.html") initSpamList();
-    else if (n === "spamtrigger_visual.html") initSpamVisual();
-    else if (n === "content_analysis.html") initDesign();
-    else if (n === "accessibilty.html") initA11y();
-    else if (n === "html_analyzer.html") initHtmlAnalyzer();
-    else if (n === "multi-analysis.html") initMulti();
+    var pk = pageKey();
+    if (pk === "spamtrigger_list") initSpamList();
+    else if (pk === "spamtrigger_visual") initSpamVisual();
+    else if (pk === "content_analysis") initDesign();
+    else if (pk === "accessibilty") initA11y();
+    else if (pk === "html_analyzer") initHtmlAnalyzer();
+    else if (pk === "multi-analysis") initMulti();
   });
 })();

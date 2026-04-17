@@ -195,11 +195,11 @@
 <div>
 <h3 class="font-headline font-bold text-lg mb-4">Display Mode</h3>
 <div class="bg-surface-container-highest p-1 rounded-xl flex items-center">
-<button class="flex-1 bg-white shadow-sm py-2 rounded-lg text-sm font-bold text-primary flex items-center justify-center gap-2">
+<button type="button" id="clarity-spam-view-list" class="flex-1 bg-white shadow-sm py-2 rounded-lg text-sm font-bold text-primary flex items-center justify-center gap-2">
 <span class="material-symbols-outlined text-lg">list</span>
                             List View
                         </button>
-<button class="flex-1 py-2 rounded-lg text-sm font-medium text-on-surface-variant flex items-center justify-center gap-2 hover:bg-white/50 transition-all">
+<button type="button" id="clarity-spam-view-image" class="flex-1 py-2 rounded-lg text-sm font-medium text-on-surface-variant flex items-center justify-center gap-2 hover:bg-white/50 transition-all">
 <span class="material-symbols-outlined text-lg">image</span>
                             Image View
                         </button>
@@ -213,7 +213,7 @@
 </div>
 </div>
 <!-- Main List Content -->
-<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div id="clarity-spam-detected" class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
 <div class="p-6 flex items-center justify-between border-b border-surface-container-low">
 <div class="flex items-center gap-4">
 <h3 class="font-headline font-bold text-xl text-on-surface">Detected Triggers</h3>
@@ -237,16 +237,14 @@
 </table>
 </div>
 <!-- Pagination/Footer -->
-<div class="p-6 bg-surface-container-low/30 flex items-center justify-between">
-<span class="text-sm text-on-surface-variant font-medium">Showing 5 of 14 results</span>
-<div class="flex items-center gap-2">
-<button class="w-10 h-10 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-all">
+<div class="p-6 bg-surface-container-low/30 flex flex-wrap items-center justify-between gap-3">
+<span id="clarity-spam-page-info" class="text-sm text-on-surface-variant font-medium"></span>
+<div id="clarity-spam-pager" class="hidden flex items-center gap-2">
+<button type="button" id="clarity-spam-pager-prev" class="w-10 h-10 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-all">
 <span class="material-symbols-outlined">chevron_left</span>
 </button>
-<button class="w-10 h-10 rounded-lg flex items-center justify-center bg-primary text-white font-bold text-sm">1</button>
-<button class="w-10 h-10 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-all">2</button>
-<button class="w-10 h-10 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-all">3</button>
-<button class="w-10 h-10 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-all">
+<div id="clarity-spam-pager-pages" class="flex items-center gap-2"></div>
+<button type="button" id="clarity-spam-pager-next" class="w-10 h-10 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-all">
 <span class="material-symbols-outlined">chevron_right</span>
 </button>
 </div>

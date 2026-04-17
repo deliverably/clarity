@@ -1,5 +1,8 @@
 (function (global) {
-  var STORAGE_KEY = "clarity-workflow-designs-v1";
+  var STORAGE_KEY =
+    typeof global.CLARITY_DESIGNS_STORAGE_KEY === "string"
+      ? global.CLARITY_DESIGNS_STORAGE_KEY
+      : "clarity-workflow-designs-v1";
 
   /**
    * Pause after each module finishes, before starting the next (ms).
@@ -45,7 +48,7 @@
     html: { label: "HTML analyzer", hint: "Optimized output + notes" },
   };
 
-  function moduleWorkflowUrl(moduleId) {
+  function moduleWorkflowUrl(moduleId, designId) {
     var path =
       {
         grammar: "grammar.html",
@@ -62,7 +65,9 @@
     if (moduleId === "keywords") tab = "&tab=kw";
     else if (moduleId === "heatmap") tab = "&tab=heat";
     else if (moduleId === "performance") tab = "&tab=perf";
-    return path + "?workflow=1" + tab;
+    var q = "?workflow=1" + tab;
+    if (designId) q += "&designId=" + encodeURIComponent(String(designId));
+    return path + q;
   }
 
   function workflowBundleForSession(design) {
@@ -429,7 +434,7 @@
               window.alert("Could not store results for the module page (browser storage limit). Try freeing site data or use a smaller HTML sample.");
               return;
             }
-            var url = moduleWorkflowUrl(id);
+            var url = moduleWorkflowUrl(id, d.id);
             window.open(url, "_blank", "noopener,noreferrer");
             return;
           }

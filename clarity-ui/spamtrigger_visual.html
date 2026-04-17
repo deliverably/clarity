@@ -177,8 +177,8 @@
 </div>
 </div>
 <div class="flex bg-surface-container-high p-1 rounded-xl shadow-inner">
-<button class="px-6 py-2 rounded-lg text-sm font-semibold text-on-surface-variant hover:text-primary transition-all">Source Code</button>
-<button class="px-6 py-2 rounded-lg bg-surface-container-lowest shadow-sm text-sm font-bold text-primary transition-all">Image View</button>
+<button type="button" id="clarity-spam-visual-source" class="px-6 py-2 rounded-lg text-sm font-semibold text-on-surface-variant hover:text-primary transition-all">Source Code</button>
+<button type="button" class="px-6 py-2 rounded-lg bg-surface-container-lowest shadow-sm text-sm font-bold text-primary transition-all">Image View</button>
 </div>
 </section>
 <!-- Main Bento Layout -->
@@ -205,7 +205,7 @@
 <p class="text-sm text-on-surface-variant">Suggestions appear here after analysis.</p>
 </div>
 <div class="mt-8 pt-6 border-t border-outline-variant/30 text-center">
-<button class="text-primary font-bold text-sm hover:underline flex items-center justify-center gap-2 mx-auto">
+<button type="button" id="clarity-spam-visual-auto-replace" class="text-primary font-bold text-sm hover:underline flex items-center justify-center gap-2 mx-auto">
 <span class="material-symbols-outlined">auto_fix</span>
                                 Auto-replace all low risk
                             </button>
@@ -215,13 +215,13 @@
 <div class="p-6 bg-surface-container-low rounded-2xl space-y-4">
 <p class="text-xs font-extrabold text-on-surface-variant tracking-widest uppercase">Content Health Score</p>
 <div class="flex items-center justify-between">
-<div class="text-4xl font-headline font-extrabold text-error">42%</div>
+<div id="clarity-spam-visual-health-pct" class="text-4xl font-headline font-extrabold text-error">—</div>
 <div class="flex-1 ml-4 h-3 bg-white rounded-full overflow-hidden border border-outline-variant/30">
-<div class="h-full bg-error rounded-full" style="width: 42%"></div>
+<div id="clarity-spam-visual-health-bar" class="h-full bg-error rounded-full" style="width: 0%"></div>
 </div>
 </div>
-<p class="text-xs text-on-surface-variant leading-relaxed">
-                            Your current draft has a high probability of triggering Gmail's "Promotions" or "Spam" filter due to aggressive marketing terminology.
+<p id="clarity-spam-visual-health-copy" class="text-xs text-on-surface-variant leading-relaxed">
+                            Spam score and risk appear here after analysis.
                         </p>
 </div>
 </div>
