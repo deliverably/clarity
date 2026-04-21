@@ -179,20 +179,13 @@
 </header>
 <!-- Main Content Canvas -->
 <main class="ml-64 p-8 min-h-[calc(100vh-72px)] bg-background">
-<section class="mb-8 bg-surface-container-lowest rounded-2xl border border-outline-variant/10 p-6 space-y-3 shadow-sm">
-<div class="flex flex-wrap items-center justify-between gap-2">
-<h3 class="text-sm font-bold font-headline text-on-surface">Email HTML</h3>
-<span id="clarity-links-status" class="text-xs text-on-surface-variant"></span>
+<!-- Hidden fields for workflow/API (HTML supplied from workspace or prior analysis) -->
+<div class="sr-only" aria-hidden="true">
+<textarea id="clarity-link-email-html" rows="1" cols="1"></textarea>
+<input id="clarity-link-expected-host" type="text" value=""/>
+<input id="clarity-link-base-url" type="url" value=""/>
+<button id="clarity-run-links" type="button">Analyze links</button>
 </div>
-<div data-clarity-manual-only class="space-y-3">
-<textarea id="clarity-link-email-html" rows="8" class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-low p-4 text-xs font-mono focus:ring-2 focus:ring-primary/30" placeholder="Paste full email HTML…">&lt;html&gt;&lt;body&gt;&lt;a href=&quot;https://example.com&quot;&gt;Shop&lt;/a&gt; &lt;a href=&quot;http://insecure.example/x&quot;&gt;Old&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</textarea>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-<input id="clarity-link-expected-host" class="rounded-xl border border-outline-variant/20 bg-white px-3 py-2 text-sm" placeholder="Expected brand host (optional), e.g. example.com" type="text"/>
-<input id="clarity-link-base-url" class="rounded-xl border border-outline-variant/20 bg-white px-3 py-2 text-sm" placeholder="Base URL for relative links (optional)" type="url"/>
-<button id="clarity-run-links" type="button" class="rounded-xl bg-primary text-white px-4 py-2 text-sm font-bold hover:shadow-lg">Analyze links</button>
-</div>
-</div>
-</section>
 <!-- Metric Grid (Sparklines & High contrast) -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
 <!-- Success Rate -->
@@ -201,7 +194,7 @@
 <div class="p-2 bg-tertiary-fixed rounded-lg">
 <span class="material-symbols-outlined text-on-tertiary-fixed-variant" style="font-variation-settings: 'FILL' 1;">check_circle</span>
 </div>
-<span class="text-on-tertiary-fixed-variant font-bold text-xs">+2.4%</span>
+<span id="clarity-metric-ok-delta" class="text-on-tertiary-fixed-variant font-bold text-xs">—</span>
 </div>
 <div>
 <h3 class="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-1">Success Rate</h3>
@@ -221,7 +214,7 @@
 <div class="p-2 bg-error-container rounded-lg">
 <span class="material-symbols-outlined text-on-error-container" style="font-variation-settings: 'FILL' 1;">link_off</span>
 </div>
-<span class="text-error font-bold text-xs">-12</span>
+<span id="clarity-metric-broken-delta" class="text-error font-bold text-xs">—</span>
 </div>
 <div>
 <h3 class="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-1">Broken Links</h3>
@@ -241,7 +234,7 @@
 <div class="p-2 bg-secondary-fixed rounded-lg">
 <span class="material-symbols-outlined text-on-secondary-fixed-variant" style="font-variation-settings: 'FILL' 1;">alt_route</span>
 </div>
-<span class="text-on-secondary-fixed-variant font-bold text-xs">+114</span>
+<span id="clarity-metric-redirects-delta" class="text-on-secondary-fixed-variant font-bold text-xs">—</span>
 </div>
 <div>
 <h3 class="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-1">Active Redirects</h3>
@@ -261,7 +254,7 @@
 <div class="p-2 bg-primary-fixed rounded-lg">
 <span class="material-symbols-outlined text-on-primary-fixed-variant" style="font-variation-settings: 'FILL' 1;">speed</span>
 </div>
-<span class="text-on-primary-fixed-variant font-bold text-xs">-14ms</span>
+<span id="clarity-metric-latency-delta" class="text-on-primary-fixed-variant font-bold text-xs">—</span>
 </div>
 <div>
 <h3 class="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-1">Avg. Latency</h3>
@@ -280,27 +273,34 @@
 <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-transparent overflow-hidden">
 <!-- Grid Header & Filters -->
 <div class="p-6 border-b border-surface-container flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
-<div class="flex items-center gap-4">
+<div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+<div class="flex flex-col gap-1">
 <h3 class="text-lg font-bold font-headline">Link Repository</h3>
+<span id="clarity-links-status" class="text-xs text-on-surface-variant"></span>
+</div>
 <div class="flex items-center gap-2 bg-surface-container-low p-1 rounded-lg">
-<button class="px-3 py-1.5 text-xs font-bold bg-white text-primary rounded-md shadow-sm">All Links</button>
-<button class="px-3 py-1.5 text-xs font-medium text-on-surface-variant hover:bg-white/50 rounded-md transition-colors">Alerts Only</button>
-<button class="px-3 py-1.5 text-xs font-medium text-on-surface-variant hover:bg-white/50 rounded-md transition-colors">Archived</button>
+<button type="button" id="clarity-links-filter-all" class="clarity-links-seg px-3 py-1.5 text-xs font-bold bg-white text-primary rounded-md shadow-sm">All Links</button>
+<button type="button" id="clarity-links-filter-alerts" class="clarity-links-seg px-3 py-1.5 text-xs font-medium text-on-surface-variant hover:bg-white/50 rounded-md transition-colors">Alerts Only</button>
+<button type="button" id="clarity-links-filter-archived" class="clarity-links-seg px-3 py-1.5 text-xs font-medium text-on-surface-variant hover:bg-white/50 rounded-md transition-colors">Archived</button>
 </div>
 </div>
 <div class="flex items-center gap-3 w-full lg:w-auto">
 <div class="flex items-center gap-2 px-3 py-2 bg-surface-container-low rounded-lg border border-transparent focus-within:border-primary/30 transition-all">
 <span class="material-symbols-outlined text-slate-400 text-sm">filter_list</span>
-<select class="bg-transparent border-none text-xs font-bold focus:ring-0 p-0 pr-6 text-on-surface-variant">
-<option>Status: All</option>
-<option>Status: Active (200)</option>
-<option>Status: Broken (404)</option>
-<option>Status: Redirect (301)</option>
+<select id="clarity-links-status-filter" class="bg-transparent border-none text-xs font-bold focus:ring-0 p-0 pr-6 text-on-surface-variant">
+<option value="all">Status: All</option>
+<option value="active">Status: OK / healthy</option>
+<option value="broken">Status: Broken</option>
+<option value="redirect">Status: Redirects</option>
 </select>
 </div>
 <button id="clarity-run-links-toolbar" type="button" data-clarity-manual-only class="flex items-center gap-2 px-4 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95">
 <span class="material-symbols-outlined text-sm">add</span>
                         Bulk Analyze
+                    </button>
+<button id="clarity-run-links-workflow" type="button" class="hidden items-center gap-2 px-4 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm">link</span>
+                        Run link check
                     </button>
 <button class="p-2 bg-surface-container-low text-on-surface-variant rounded-lg hover:bg-surface-container-high transition-colors">
 <span class="material-symbols-outlined text-sm">download</span>
@@ -323,159 +323,22 @@
 <th class="px-6 py-4">Actions</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-surface-container">
-<!-- Row 1 -->
-<tr class="hover:bg-surface-container-low/40 transition-colors group">
-<td class="px-6 py-5">
-<input class="rounded-sm border-slate-300 text-primary focus:ring-primary/20" type="checkbox"/>
-</td>
-<td class="px-6 py-5">
-<div class="flex flex-col">
-<span class="text-sm font-semibold text-on-surface truncate max-w-[280px]">/api/v2/user-authentication/verify</span>
-<span class="text-[10px] text-slate-400 font-medium">https://auth.deliverably.io</span>
-</div>
-</td>
-<td class="px-6 py-5 text-center">
-<span class="px-2.5 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant text-[10px] font-bold rounded-full border border-tertiary/10">200 OK</span>
-</td>
-<td class="px-6 py-5">
-<span class="text-xs text-on-surface-variant font-medium">2 mins ago</span>
-</td>
-<td class="px-6 py-5 text-right">
-<span class="text-xs font-bold text-on-surface">142ms</span>
-</td>
-<td class="px-6 py-5 text-center">
-<span class="material-symbols-outlined text-primary text-sm" title="HTTPS Secured">lock</span>
-</td>
-<td class="px-6 py-5">
-<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button class="p-1.5 hover:bg-surface-container-high rounded-md transition-colors text-slate-400 hover:text-primary">
-<span class="material-symbols-outlined text-sm">visibility</span>
-</button>
-<button class="p-1.5 hover:bg-surface-container-high rounded-md transition-colors text-slate-400 hover:text-primary">
-<span class="material-symbols-outlined text-sm">bar_chart</span>
-</button>
-</div>
-</td>
-</tr>
-<!-- Row 2 -->
-<tr class="hover:bg-surface-container-low/40 transition-colors group">
-<td class="px-6 py-5">
-<input class="rounded-sm border-slate-300 text-primary focus:ring-primary/20" type="checkbox"/>
-</td>
-<td class="px-6 py-5">
-<div class="flex flex-col">
-<span class="text-sm font-semibold text-on-surface truncate max-w-[280px]">/resources/whitepapers/saas-delivery-2024.pdf</span>
-<span class="text-[10px] text-slate-400 font-medium">https://cdn.deliverably.io</span>
-</div>
-</td>
-<td class="px-6 py-5 text-center">
-<span class="px-2.5 py-1 bg-error-container text-on-error-container text-[10px] font-bold rounded-full border border-error/10">404 BROKEN</span>
-</td>
-<td class="px-6 py-5">
-<span class="text-xs text-on-surface-variant font-medium">12 mins ago</span>
-</td>
-<td class="px-6 py-5 text-right">
-<span class="text-xs font-bold text-error">--</span>
-</td>
-<td class="px-6 py-5 text-center">
-<span class="material-symbols-outlined text-slate-300 text-sm">lock_open</span>
-</td>
-<td class="px-6 py-5">
-<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button class="p-1.5 hover:bg-surface-container-high rounded-md transition-colors text-slate-400 hover:text-primary">
-<span class="material-symbols-outlined text-sm">refresh</span>
-</button>
-<button class="p-1.5 hover:bg-surface-container-high rounded-md transition-colors text-slate-400 hover:text-error">
-<span class="material-symbols-outlined text-sm">delete</span>
-</button>
-</div>
-</td>
-</tr>
-<!-- Row 3 -->
-<tr class="hover:bg-surface-container-low/40 transition-colors group">
-<td class="px-6 py-5">
-<input class="rounded-sm border-slate-300 text-primary focus:ring-primary/20" type="checkbox"/>
-</td>
-<td class="px-6 py-5">
-<div class="flex flex-col">
-<span class="text-sm font-semibold text-on-surface truncate max-w-[280px]">/pricing</span>
-<span class="text-[10px] text-slate-400 font-medium">https://deliverably.com</span>
-</div>
-</td>
-<td class="px-6 py-5 text-center">
-<span class="px-2.5 py-1 bg-secondary-fixed text-on-secondary-fixed-variant text-[10px] font-bold rounded-full border border-secondary/10">301 MOVED</span>
-</td>
-<td class="px-6 py-5">
-<span class="text-xs text-on-surface-variant font-medium">45 mins ago</span>
-</td>
-<td class="px-6 py-5 text-right">
-<span class="text-xs font-bold text-on-surface">310ms</span>
-</td>
-<td class="px-6 py-5 text-center">
-<span class="material-symbols-outlined text-primary text-sm">lock</span>
-</td>
-<td class="px-6 py-5">
-<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button class="p-1.5 hover:bg-surface-container-high rounded-md transition-colors text-slate-400 hover:text-primary">
-<span class="material-symbols-outlined text-sm">visibility</span>
-</button>
-<button class="p-1.5 hover:bg-surface-container-high rounded-md transition-colors text-slate-400 hover:text-primary">
-<span class="material-symbols-outlined text-sm">edit</span>
-</button>
-</div>
-</td>
-</tr>
-<!-- Row 4 -->
-<tr class="hover:bg-surface-container-low/40 transition-colors group">
-<td class="px-6 py-5">
-<input class="rounded-sm border-slate-300 text-primary focus:ring-primary/20" type="checkbox"/>
-</td>
-<td class="px-6 py-5">
-<div class="flex flex-col">
-<span class="text-sm font-semibold text-on-surface truncate max-w-[280px]">/webhooks/inbound-mail-handler</span>
-<span class="text-[10px] text-slate-400 font-medium">https://api.deliverably.io</span>
-</div>
-</td>
-<td class="px-6 py-5 text-center">
-<span class="px-2.5 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant text-[10px] font-bold rounded-full border border-tertiary/10">200 OK</span>
-</td>
-<td class="px-6 py-5">
-<span class="text-xs text-on-surface-variant font-medium">1 hour ago</span>
-</td>
-<td class="px-6 py-5 text-right">
-<span class="text-xs font-bold text-on-surface">512ms</span>
-</td>
-<td class="px-6 py-5 text-center">
-<span class="material-symbols-outlined text-primary text-sm">lock</span>
-</td>
-<td class="px-6 py-5">
-<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-<button class="p-1.5 hover:bg-surface-container-high rounded-md transition-colors text-slate-400 hover:text-primary">
-<span class="material-symbols-outlined text-sm">visibility</span>
-</button>
-<button class="p-1.5 hover:bg-surface-container-high rounded-md transition-colors text-slate-400 hover:text-primary">
-<span class="material-symbols-outlined text-sm">bar_chart</span>
-</button>
-</div>
-</td>
+<tbody id="clarity-links-tbody" class="divide-y divide-surface-container">
+<tr id="clarity-links-tbody-boot" data-clarity-links-boot>
+<td colspan="7" class="px-6 py-8 text-center text-sm text-on-surface-variant">Loading link dashboard…</td>
 </tr>
 </tbody>
 </table>
 </div>
-<!-- Pagination (Ghost buttons, design system mandated) -->
-<div class="px-6 py-4 bg-surface-container-low/20 border-t border-surface-container flex items-center justify-between">
-<span class="text-xs font-medium text-on-surface-variant">Showing <span class="font-bold text-on-surface">1-4</span> of <span class="font-bold text-on-surface">842</span> items</span>
-<div class="flex items-center gap-1">
-<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<!-- Pagination (filled by links-page.js) -->
+<div class="px-6 py-4 bg-surface-container-low/20 border-t border-surface-container flex flex-wrap items-center justify-between gap-3">
+<span id="clarity-links-page-info" class="text-xs font-medium text-on-surface-variant"></span>
+<div id="clarity-links-pager" class="hidden items-center gap-1">
+<button type="button" id="clarity-links-pager-prev" class="p-2 text-slate-400 hover:text-primary transition-colors disabled:opacity-40 disabled:pointer-events-none" aria-label="Previous page">
 <span class="material-symbols-outlined text-sm">chevron_left</span>
 </button>
-<button class="w-8 h-8 flex items-center justify-center text-xs font-bold bg-primary-container text-white rounded-md">1</button>
-<button class="w-8 h-8 flex items-center justify-center text-xs font-medium text-on-surface-variant hover:bg-surface-container-high rounded-md transition-colors">2</button>
-<button class="w-8 h-8 flex items-center justify-center text-xs font-medium text-on-surface-variant hover:bg-surface-container-high rounded-md transition-colors">3</button>
-<span class="px-2 text-slate-400">...</span>
-<button class="w-8 h-8 flex items-center justify-center text-xs font-medium text-on-surface-variant hover:bg-surface-container-high rounded-md transition-colors">12</button>
-<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<div id="clarity-links-pager-pages" class="flex items-center gap-1"></div>
+<button type="button" id="clarity-links-pager-next" class="p-2 text-slate-400 hover:text-primary transition-colors disabled:opacity-40 disabled:pointer-events-none" aria-label="Next page">
 <span class="material-symbols-outlined text-sm">chevron_right</span>
 </button>
 </div>
@@ -487,34 +350,14 @@
 <div class="flex justify-between items-center mb-6">
 <div>
 <h4 class="text-xl font-bold font-headline mb-1">Latency Distribution</h4>
-<p class="text-sm text-on-surface-variant">Response time consistency across global edge nodes.</p>
+<p id="clarity-links-latency-subtitle" class="text-sm text-on-surface-variant">Response times for links in this email (ms), binned after analysis.</p>
 </div>
-<button class="text-xs font-bold text-primary flex items-center gap-1">
+<button type="button" class="text-xs font-bold text-primary flex items-center gap-1 opacity-50 pointer-events-none" disabled>
                         View Full Report <span class="material-symbols-outlined text-sm">north_east</span>
 </button>
 </div>
-<!-- Visual Placeholder for complex chart -->
-<div class="h-64 flex items-end justify-between gap-4 px-4 pt-4">
-<div class="w-full bg-primary-fixed/20 h-[30%] rounded-t-lg relative group">
-<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">US-East</div>
-</div>
-<div class="w-full bg-primary h-[85%] rounded-t-lg relative group shadow-lg shadow-primary/20">
-<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">US-West</div>
-</div>
-<div class="w-full bg-primary-fixed/20 h-[45%] rounded-t-lg relative group">
-<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">EU-Central</div>
-</div>
-<div class="w-full bg-primary-fixed/20 h-[60%] rounded-t-lg relative group">
-<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">AP-South</div>
-</div>
-<div class="w-full bg-primary-fixed/20 h-[35%] rounded-t-lg relative group">
-<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">SA-East</div>
-</div>
-</div>
-<div class="flex justify-between mt-4 px-2">
-<span class="text-[10px] font-bold text-slate-400">AMER</span>
-<span class="text-[10px] font-bold text-slate-400">EMEA</span>
-<span class="text-[10px] font-bold text-slate-400">APAC</span>
+<div id="clarity-links-latency-chart" class="h-64 flex items-end justify-center gap-2 px-4 pt-8 pb-2 text-xs text-on-surface-variant">
+<span class="self-center py-12">Run link analysis to see latency spread.</span>
 </div>
 </div>
 <div class="bg-gradient-to-br from-inverse-surface to-[#111c2d] p-8 rounded-2xl shadow-xl flex flex-col justify-between text-white overflow-hidden relative">
@@ -523,8 +366,8 @@
 <div class="absolute bottom-0 left-0 w-32 h-32 bg-primary opacity-20 blur-[60px] rounded-full"></div>
 <div class="relative z-10">
 <span class="bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6 inline-block">Heuristic Insight</span>
-<h4 class="text-2xl font-bold font-headline mb-4 leading-tight">Redirect chains are slowing down conversion.</h4>
-<p class="text-slate-300 text-sm leading-relaxed mb-6">Our analysis identified 14 landing pages with 3+ hops. Resolving these could improve FCP by <span class="text-secondary-fixed-dim font-bold">420ms</span> on average.</p>
+<h4 id="clarity-links-insight-title" class="text-2xl font-bold font-headline mb-4 leading-tight">—</h4>
+<p id="clarity-links-insight-body" class="text-slate-300 text-sm leading-relaxed mb-6">Run link analysis to generate an insight from your email’s links.</p>
 </div>
 <div class="relative z-10">
 <div class="flex -space-x-3 mb-6">
@@ -547,5 +390,5 @@
 <script>window.CLARITY_API_BASE = window.CLARITY_API_BASE || "http://localhost:3000";</script>
 <script src="js/clarity-workflow-common.js"></script>
 <script src="js/clarity-api.js"></script>
-<script src="js/links-page.js"></script>
+<script src="js/links-page.js" onerror="(function(){var s=document.getElementById('clarity-links-status');if(s)s.textContent='Could not load js/links-page.js (404). Run a static server in the clarity-ui folder (e.g. npx serve .) and open /link_analysis.html.';var t=document.getElementById('clarity-links-tbody');if(t){var r=document.createElement('tr');var c=document.createElement('td');c.colSpan=7;c.className='px-6 py-8 text-center text-sm text-error';c.textContent='links-page.js failed to load — check Network tab.';r.appendChild(c);t.innerHTML='';t.appendChild(r);}})();"></script>
 </body></html>

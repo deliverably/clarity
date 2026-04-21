@@ -37,6 +37,16 @@ export const grammarResponseSchema = z.object({
   ),
 });
 
+const trends30dSchema = z
+  .object({
+    ok_percent_delta: z.number().nullable(),
+    broken_delta: z.number().nullable(),
+    redirects_delta: z.number().nullable(),
+    avg_latency_ms_delta: z.number().nullable(),
+  })
+  .nullable()
+  .optional();
+
 export const linkSummarySchema = z.object({
   total: z.number().int().nonnegative(),
   ok_count: z.number().int().nonnegative(),
@@ -44,6 +54,10 @@ export const linkSummarySchema = z.object({
   ok_percent: z.number().int(),
   error_percent: z.number().int(),
   top_issues: z.array(z.string()).max(10),
+  /** Mean latency (ms) over links with a measured `latency_ms`; null if none. */
+  avg_latency_ms: z.number().nonnegative().nullable().optional(),
+  /** Populated when historical analytics exist; otherwise omit or null. */
+  trends_30d: trends30dSchema,
 });
 
 const linkStatus = z.enum([
@@ -65,6 +79,7 @@ export const linkRowSchema = z.object({
   status_note: z.string(),
   risk_level: z.enum(["none", "low", "medium", "high"]),
   hops: z.number().int().nonnegative().optional(),
+  latency_ms: z.number().int().nonnegative().nullable().optional(),
 });
 
 export const linksResponseSchema = z.object({
@@ -258,7 +273,8 @@ export const accessibilityResponseSchema = z.object({
       wcag_reference: z.string(),
     }),
   ),
-  audio_content: z.array(z.string()).max(5).optional(),
+  /** Ordered lines for screen-reader-style narration (TTS); short lines preferred. */
+  audio_content: z.array(z.string()).max(20).optional(),
   color_vision_flags: z.array(
     z.object({
       zone: z.string(),

@@ -17,6 +17,7 @@ export type LinkAnalysisRow = {
   status_note: string;
   risk_level: "none" | "low" | "medium" | "high";
   hops?: number;
+  latency_ms?: number | null;
 };
 
 function classify(
@@ -123,12 +124,17 @@ export async function analyzeLinks(emailHtml: string, expectedHost?: string | nu
       locMap.get(p.id) ||
       guessLocation(e.index, extracted.length, e.anchor_text);
     const cls = classify(p.url, p.check, expectedHost);
+    const latency_ms =
+      typeof p.check.latency_ms === "number" && Number.isFinite(p.check.latency_ms)
+        ? Math.max(0, Math.round(p.check.latency_ms))
+        : null;
     return {
       id: p.id,
       url: p.url,
       anchor_text: p.anchor_text,
       location: loc,
       hops: p.check.hops,
+      latency_ms,
       ...cls,
     };
   });
@@ -149,6 +155,12 @@ export async function analyzeLinks(emailHtml: string, expectedHost?: string | nu
     .slice(0, 3)
     .map(([k]) => k);
 
+  const latencies = links
+    .map((l) => l.latency_ms)
+    .filter((n): n is number => typeof n === "number" && n >= 0);
+  const avg_latency_ms =
+    latencies.length === 0 ? null : Math.round(latencies.reduce((a, b) => a + b, 0) / latencies.length);
+
   return {
     summary: {
       total,
@@ -157,6 +169,8 @@ export async function analyzeLinks(emailHtml: string, expectedHost?: string | nu
       ok_percent,
       error_percent,
       top_issues,
+      avg_latency_ms,
+      trends_30d: null,
     },
     links,
   };

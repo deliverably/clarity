@@ -3,6 +3,8 @@ export type CheckResult = {
   statusCode: number | null;
   hops: number;
   error?: string;
+  /** Sum of round-trip times for each hop until terminal response; null if no measurable request completed. */
+  latency_ms?: number | null;
 };
 
 const TRACKING_HOST_FRAGMENTS = [
@@ -38,6 +40,8 @@ export async function checkUrl(
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
 
+  let totalMs = 0;
+
   try {
     for (let i = 0; i <= maxHops; i++) {
       const reqInit: RequestInit = {
@@ -50,6 +54,7 @@ export async function checkUrl(
         },
       };
 
+      const t0 = Date.now();
       let res = await fetch(current, reqInit).catch((e: Error) => {
         throw new Error(e.message || "fetch failed");
       });
@@ -60,24 +65,43 @@ export async function checkUrl(
         });
       }
 
+      totalMs += Date.now() - t0;
       lastCode = res.status;
 
       if (res.status >= 300 && res.status < 400) {
         const loc = res.headers.get("location");
         if (!loc) {
-          return { finalUrl: current, statusCode: lastCode, hops, error: "redirect without location" };
+          return {
+            finalUrl: current,
+            statusCode: lastCode,
+            hops,
+            error: "redirect without location",
+            latency_ms: totalMs > 0 ? totalMs : null,
+          };
         }
         hops += 1;
         current = new URL(loc, current).href;
         continue;
       }
 
-      return { finalUrl: current, statusCode: lastCode, hops };
+      return { finalUrl: current, statusCode: lastCode, hops, latency_ms: totalMs };
     }
-    return { finalUrl: current, statusCode: lastCode, hops, error: "too many redirects" };
+    return {
+      finalUrl: current,
+      statusCode: lastCode,
+      hops,
+      error: "too many redirects",
+      latency_ms: totalMs > 0 ? totalMs : null,
+    };
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
-    return { finalUrl: current, statusCode: null, hops, error: msg };
+    return {
+      finalUrl: current,
+      statusCode: null,
+      hops,
+      error: msg,
+      latency_ms: totalMs > 0 ? totalMs : null,
+    };
   } finally {
     clearTimeout(timer);
   }

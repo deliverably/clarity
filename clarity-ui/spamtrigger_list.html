@@ -79,6 +79,7 @@
         }
         body { font-family: 'Inter', sans-serif; }
         h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+        html.clarity-workflow-mode #clarity-spam-kw-out { display: none; }
     </style>
 </head>
 <body class="bg-background text-on-surface">
@@ -155,6 +156,15 @@
 <main class="ml-64 pt-24 px-10 pb-12 min-h-screen">
 <section class="mb-6 rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-4 space-y-2 shadow-sm">
 <p id="clarity-spam-status" class="text-xs text-on-surface-variant min-h-[1rem]"></p>
+</section>
+<div class="mb-6">
+<div class="bg-surface-container-highest p-1 rounded-xl flex items-center max-w-lg">
+<button type="button" id="clarity-spam-tab-spam" class="flex-1 bg-white shadow-sm py-2 rounded-lg text-sm font-bold text-primary text-center transition-all">Spam triggers</button>
+<button type="button" id="clarity-spam-tab-kw" class="flex-1 py-2 rounded-lg text-sm font-medium text-on-surface-variant text-center hover:bg-white/50 transition-all">Keyword suggestions</button>
+</div>
+</div>
+<div id="clarity-spam-view-root" class="space-y-6">
+<section class="rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-4 space-y-2 shadow-sm">
 <div data-clarity-manual-only class="space-y-2">
 <label class="text-xs font-bold text-on-surface-variant uppercase">Email content</label>
 <textarea id="clarity-spam-email" rows="5" class="w-full rounded-lg border border-outline-variant/30 bg-white p-3 text-sm" placeholder="Paste email copy…">ACT NOW!!! Get 100% FREE cash bonus — limited time only.</textarea>
@@ -249,6 +259,20 @@
 </button>
 </div>
 </div>
+</div>
+</div>
+<div id="clarity-kw-view-root" class="hidden space-y-4">
+<section class="rounded-xl border border-outline-variant/20 bg-surface-container-lowest p-4 shadow-sm space-y-3">
+<div data-clarity-manual-only class="space-y-3">
+<label class="text-xs font-bold text-on-surface-variant uppercase">Sector (or Auto-detect)</label>
+<input id="kw-sector" class="w-full rounded-lg border border-outline-variant/30 bg-white p-3 text-sm" value="Auto-detect"/>
+<label class="text-xs font-bold text-on-surface-variant uppercase">Email content</label>
+<textarea id="kw-body" rows="6" class="w-full rounded-lg border border-outline-variant/30 bg-white p-3 text-sm">SaaS platform for teams. Start your free trial today.</textarea>
+<button id="kw-run" type="button" class="rounded-lg bg-on-surface px-4 py-2 text-sm font-bold text-white hover:bg-primary">Run keywords</button>
+</div>
+<div id="clarity-kw-ui" class="hidden mt-4 rounded-xl border border-outline-variant/20 bg-white p-4 text-sm text-on-surface space-y-2"></div>
+<pre id="clarity-spam-kw-out" class="mt-4 bg-surface-container-lowest border border-outline-variant/20 rounded-lg p-4 text-xs overflow-auto max-h-96 font-mono"></pre>
+</section>
 </div>
 </main>
 <script>window.CLARITY_API_BASE = window.CLARITY_API_BASE || "http://localhost:3000";</script>

@@ -29,19 +29,20 @@
     "links",
     "spam",
     "performance",
-    "keywords",
     "heatmap",
     "design",
     "accessibility",
     "html",
   ];
 
+  /** Persisted with designs but not a separate studio tile (runs after spam). */
+  var ANALYSIS_EXTRA_KEYS = ["keywords"];
+
   var MODULE_META = {
     grammar: { label: "Spelling & grammar", hint: "Tone + issue list" },
     links: { label: "Link analysis", hint: "URL status + analytics" },
-    spam: { label: "Spam detection", hint: "Trigger words + fixes" },
+    spam: { label: "Spam & keywords", hint: "Triggers + sector keyword ideas" },
     performance: { label: "Open rate & CTR", hint: "Performance prediction" },
-    keywords: { label: "Keyword suggestions", hint: "Sector-aware AI" },
     heatmap: { label: "AI heatmap", hint: "Zone engagement scores" },
     design: { label: "Design analysis", hint: "Quality scores + suggestions" },
     accessibility: { label: "Accessibility", hint: "WCAG-style audit" },
@@ -55,15 +56,13 @@
         links: "link_analysis.html",
         spam: "spamtrigger_list.html",
         performance: "multi-analysis.html",
-        keywords: "multi-analysis.html",
         heatmap: "multi-analysis.html",
         design: "content_analysis.html",
         accessibility: "accessibilty.html",
         html: "html_analyzer.html",
       }[moduleId] || "grammar.html";
     var tab = "";
-    if (moduleId === "keywords") tab = "&tab=kw";
-    else if (moduleId === "heatmap") tab = "&tab=heat";
+    if (moduleId === "heatmap") tab = "&tab=heat";
     else if (moduleId === "performance") tab = "&tab=perf";
     var q = "?workflow=1" + tab;
     if (designId) q += "&designId=" + encodeURIComponent(String(designId));
@@ -92,13 +91,6 @@
     d.innerHTML = html || "";
     var t = (d.textContent || "").replace(/\s+/g, " ").trim();
     return t.length ? t : " ";
-  }
-
-  function parseEmlOrHtml(raw) {
-    var s = String(raw || "");
-    var htmlBlock = s.match(/<\s*html[\s\S]*<\/\s*html\s*>/i);
-    if (htmlBlock) return htmlBlock[0];
-    return s;
   }
 
   function guessSubject(html, rawUpload) {
@@ -137,6 +129,9 @@
     MODULE_ORDER.forEach(function (id) {
       o[id] = { status: "idle", data: null, error: null };
     });
+    ANALYSIS_EXTRA_KEYS.forEach(function (id) {
+      o[id] = { status: "idle", data: null, error: null };
+    });
     return o;
   }
 
@@ -149,6 +144,9 @@
       return arr.map(function (d) {
         if (!d.analysis) d.analysis = emptyAnalysisState();
         MODULE_ORDER.forEach(function (id) {
+          if (!d.analysis[id]) d.analysis[id] = { status: "idle", data: null, error: null };
+        });
+        ANALYSIS_EXTRA_KEYS.forEach(function (id) {
           if (!d.analysis[id]) d.analysis[id] = { status: "idle", data: null, error: null };
         });
         return d;
@@ -229,7 +227,7 @@
     return window.ClarityAPI.runAnalysis(moduleId, p);
   }
 
-  function summaryLine(moduleId, state) {
+  function summaryLine(moduleId, state, design) {
     if (state.status === "running") return "Running…";
     if (state.status === "pending") return "Queued…";
     if (state.status === "error") {
@@ -245,8 +243,22 @@
         return ((d.issues && d.issues.length) || 0) + " issues · tone: " + (((d.tone || [])[0] || {}).label || "—");
       case "links":
         return (d.summary && d.summary.ok_percent != null ? d.summary.ok_percent : "—") + "% OK · " + ((d.links || []).length + " links");
-      case "spam":
-        return ((d.summary && d.summary.total_triggers) || 0) + " triggers · " + ((d.summary && d.summary.risk_level) || "");
+      case "spam": {
+        var base =
+          ((d.summary && d.summary.total_triggers) || 0) +
+          " triggers · " +
+          ((d.summary && d.summary.risk_level) || "");
+        var kw = design && design.analysis && design.analysis.keywords;
+        if (!kw) return base;
+        if (kw.status === "running" || kw.status === "pending") return base + " · keywords…";
+        if (kw.status === "error") return base + " · keywords failed";
+        if (kw.status === "done" && kw.data) {
+          var kd = kw.data;
+          var n = (kd.suggestions || []).length + (kd.keyword_audit || []).length;
+          return base + " · " + n + " kw · " + (kd.detected_sector || "—");
+        }
+        return base;
+      }
       case "performance": {
         var or = d.open_rate || {};
         var ctr = d.ctr || {};
@@ -349,7 +361,7 @@
       listEl.innerHTML = "";
       if (!designs.length) {
         listEl.innerHTML =
-          '<p class="text-sm text-slate-500 col-span-full">No saved designs yet. Paste or upload HTML, name it, then save — all nine modules run automatically.</p>';
+          '<p class="text-sm text-slate-500 col-span-full">No saved designs yet. Paste or upload HTML, name it, then save — all analyses run automatically (keyword detection runs with Spam).</p>';
         if (gateNote) gateNote.classList.remove("hidden");
         return;
       }
@@ -363,12 +375,18 @@
           card.className =
             "text-left rounded-xl border border-slate-200 bg-white shadow-sm hover:border-indigo-300 hover:shadow transition overflow-hidden flex flex-col";
           card.setAttribute("data-design-id", d.id);
-          var ready = MODULE_ORDER.every(function (id) {
-            return d.analysis && d.analysis[id] && d.analysis[id].status === "done";
-          });
-          var anyRun = MODULE_ORDER.some(function (id) {
-            return d.analysis && d.analysis[id] && d.analysis[id].status === "running";
-          });
+          var ready =
+            MODULE_ORDER.every(function (id) {
+              return d.analysis && d.analysis[id] && d.analysis[id].status === "done";
+            }) &&
+            d.analysis &&
+            d.analysis.keywords &&
+            d.analysis.keywords.status === "done";
+          var anyRun =
+            MODULE_ORDER.some(function (id) {
+              return d.analysis && d.analysis[id] && d.analysis[id].status === "running";
+            }) ||
+            !!(d.analysis && d.analysis.keywords && d.analysis.keywords.status === "running");
           var badge =
             '<span class="text-[10px] font-bold px-2 py-0.5 rounded-full ' +
             (anyRun ? "bg-amber-100 text-amber-800" : ready ? "bg-emerald-100 text-emerald-800" : "bg-slate-100 text-slate-600") +
@@ -420,7 +438,7 @@
           '<div class="text-xs font-bold text-slate-800 leading-tight">' +
           esc(meta.label) +
           '</div><div class="text-[10px] text-slate-500 mt-1 line-clamp-2">' +
-          esc(summaryLine(id, st)) +
+          esc(summaryLine(id, st, d)) +
           '</div><div class="text-[9px] font-mono text-slate-400 mt-1">' +
           esc(String(stLabel)) +
           "</div>";
@@ -463,6 +481,9 @@
       MODULE_ORDER.forEach(function (id) {
         design.analysis[id] = { status: "pending", data: null, error: null };
       });
+      ANALYSIS_EXTRA_KEYS.forEach(function (id) {
+        design.analysis[id] = { status: "pending", data: null, error: null };
+      });
       persist();
       renderList();
       if (currentId === design.id) {
@@ -494,6 +515,29 @@
           if (currentId === design.id) {
             renderGrid();
           }
+          if (id === "spam") {
+            design.analysis.keywords = { status: "running", data: null, error: null };
+            persist();
+            renderList();
+            if (currentId === design.id) {
+              renderGrid();
+            }
+            try {
+              var kwData = await runOneModule(design, "keywords");
+              design.analysis.keywords = { status: "done", data: kwData, error: null };
+            } catch (eKw) {
+              design.analysis.keywords = {
+                status: "error",
+                data: null,
+                error: eKw.message || String(eKw),
+              };
+            }
+            persist();
+            renderList();
+            if (currentId === design.id) {
+              renderGrid();
+            }
+          }
           if (i < MODULE_ORDER.length - 1 && gap > 0) {
             await sleep(gap);
           }
@@ -514,7 +558,7 @@
         reader.onload = function () {
           var raw = String(reader.result || "");
           lastRawUpload = raw.slice(0, 500000);
-          ta.value = parseEmlOrHtml(raw);
+          ta.value = global.clarityParseEmlOrHtml(raw);
           fileInput.value = "";
         };
         reader.readAsText(f);

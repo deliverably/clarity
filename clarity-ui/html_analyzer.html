@@ -216,11 +216,14 @@
             <!-- Original HTML Pane -->
             <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm border border-transparent">
                 <div class="bg-surface-container-low px-6 py-4 flex justify-between items-center">
-                    <div class="flex items-center gap-3">
-                        <div class="w-2 h-2 rounded-full bg-error"></div>
-                        <h3 class="headline text-sm font-bold tracking-tight text-on-surface">Original HTML</h3>
+                    <div class="flex items-center gap-2 min-w-0">
+                        <button type="button" id="clarity-html-toggle-before" class="shrink-0 p-1 rounded-lg text-on-surface-variant hover:bg-slate-200/80 dark:hover:bg-slate-700/80 transition-colors" aria-label="Expand or collapse original HTML" aria-expanded="false" aria-controls="clarity-html-before-collapsible">
+                            <span class="material-symbols-outlined text-[22px] leading-none" data-clarity-html-toggle-icon>expand_more</span>
+                        </button>
+                        <div class="w-2 h-2 rounded-full bg-error shrink-0"></div>
+                        <h3 class="headline text-sm font-bold tracking-tight text-on-surface truncate">Original HTML</h3>
                     </div>
-                    <div class="flex gap-4">
+                    <div class="flex gap-4 shrink-0">
                         <button type="button" data-clarity-manual-only class="text-primary text-[11px] font-extrabold uppercase tracking-widest flex items-center gap-1 hover:opacity-70">
                             <span class="material-symbols-outlined text-sm">play_arrow</span> Run Code
                         </button>
@@ -229,20 +232,25 @@
                         </button>
                     </div>
                 </div>
+                <div id="clarity-html-before-collapsible" class="hidden">
                 <div class="p-6 bg-slate-50 dark:bg-slate-900">
-                    <pre id="clarity-html-before" class="code-font text-xs text-slate-600 leading-relaxed overflow-x-auto whitespace-pre-wrap">(original snippet from API)</pre>
+                    <pre id="clarity-html-before" class="code-font text-xs text-slate-600 leading-relaxed overflow-x-auto max-h-[480px] overflow-y-auto whitespace-pre-wrap">Paste HTML or run the analyzer to see the original markup here.</pre>
+                </div>
                 </div>
             </div>
 
             <!-- Optimized HTML Pane -->
             <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm border border-transparent relative">
                 <div class="bg-surface-container-low px-6 py-4 flex justify-between items-center">
-                    <div class="flex items-center gap-3">
-                        <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                    <div class="flex items-center gap-2 min-w-0 flex-wrap">
+                        <button type="button" id="clarity-html-toggle-after" class="shrink-0 p-1 rounded-lg text-on-surface-variant hover:bg-slate-200/80 dark:hover:bg-slate-700/80 transition-colors" aria-label="Expand or collapse improved HTML" aria-expanded="true" aria-controls="clarity-html-after-collapsible">
+                            <span class="material-symbols-outlined text-[22px] leading-none" data-clarity-html-toggle-icon>expand_less</span>
+                        </button>
+                        <div class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></div>
                         <h3 class="headline text-sm font-bold tracking-tight text-on-surface">Improved HTML</h3>
                         <span class="bg-emerald-100 text-emerald-700 text-[10px] font-extrabold px-2 py-0.5 rounded tracking-widest">OPTIMIZED</span>
                     </div>
-                    <div class="flex gap-4">
+                    <div class="flex gap-4 shrink-0">
                         <button type="button" data-clarity-manual-only class="text-primary text-[11px] font-extrabold uppercase tracking-widest flex items-center gap-1 hover:opacity-70">
                             <span class="material-symbols-outlined text-sm">play_arrow</span> Run Code
                         </button>
@@ -251,8 +259,10 @@
                         </button>
                     </div>
                 </div>
+                <div id="clarity-html-after-collapsible">
                 <div class="p-6 bg-slate-50 dark:bg-slate-900 border-l-4 border-emerald-500/20">
-                    <pre id="clarity-html-after" class="code-font text-xs text-emerald-800 dark:text-emerald-400 leading-relaxed overflow-x-auto max-h-[480px] whitespace-pre-wrap">(optimized HTML from API)</pre>
+                    <pre id="clarity-html-after" class="code-font text-xs text-emerald-800 dark:text-emerald-400 leading-relaxed overflow-x-auto max-h-[480px] overflow-y-auto whitespace-pre-wrap">Optimized HTML from the analyzer will appear here.</pre>
+                </div>
                 </div>
             </div>
         </div>
@@ -271,50 +281,13 @@
 
         <!-- Explanation Section -->
         <section class="bg-surface-container-lowest rounded-2xl p-10 shadow-sm border border-transparent">
-            <div class="mb-10">
+            <div class="mb-8">
                 <h2 class="headline text-2xl font-extrabold text-on-surface tracking-tight mb-2">Explanation of Improvements</h2>
-                <p class="text-on-surface-variant text-sm font-medium">Detailed breakdown of semantic, structural, and performance enhancements.</p>
+                <p class="text-on-surface-variant text-sm font-medium">What changed, why it matters, and how it affects your email—populated after you run the HTML analyzer.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                <!-- Column 1 -->
-                <div class="space-y-4">
-                    <div class="w-12 h-12 rounded-xl bg-violet-50 flex items-center justify-center mb-6">
-                        <span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">table_chart</span>
-                    </div>
-                    <h4 class="headline text-xs font-extrabold tracking-[0.1em] text-on-surface-variant uppercase">Semantic Structure</h4>
-                    <p class="text-sm text-slate-600 leading-relaxed">
-                        Replaced fragile <code class="bg-slate-100 px-1 rounded">div</code> layouts with robust <code class="bg-slate-100 px-1 rounded">table</code> structures to ensure consistent rendering across legacy clients like Outlook and Yahoo.
-                    </p>
-                </div>
-
-                <!-- Column 2 -->
-                <div class="space-y-4">
-                    <div class="w-12 h-12 rounded-xl bg-violet-50 flex items-center justify-center mb-6">
-                        <span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">accessibility_new</span>
-                    </div>
-                    <h4 class="headline text-xs font-extrabold tracking-[0.1em] text-on-surface-variant uppercase">Accessibility (A11Y)</h4>
-                    <p class="text-sm text-slate-600 leading-relaxed">
-                        Added critical <code class="bg-slate-100 px-1 rounded">alt</code> tags for images and <code class="bg-slate-100 px-1 rounded">role="presentation"</code> to tables, ensuring screen readers interpret the email correctly.
-                    </p>
-                </div>
-
-                <!-- Column 3 -->
-                <div class="space-y-4">
-                    <div class="w-12 h-12 rounded-xl bg-violet-50 flex items-center justify-center mb-6">
-                        <span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">speed</span>
-                    </div>
-                    <h4 class="headline text-xs font-extrabold tracking-[0.1em] text-on-surface-variant uppercase">Performance Optimizations</h4>
-                    <p class="text-sm text-slate-600 leading-relaxed">
-                        Inlined CSS styles and optimized image attributes to reduce total file weight, speeding up load times and reducing the risk of Gmail clipping.
-                    </p>
-                </div>
-            </div>
-            <div class="mt-10 border-t border-outline-variant/20 pt-8">
-                <h3 class="headline text-lg font-bold text-on-surface mb-3">Improvements (API)</h3>
-                <ul id="clarity-html-improvements" class="list-disc pl-5 text-sm text-slate-600 space-y-2"></ul>
-                <p id="clarity-html-marketer-summary" class="text-sm text-on-surface-variant mt-4 leading-relaxed"></p>
-            </div>
+            <p id="clarity-html-marketer-summary" class="text-sm text-on-surface-variant leading-relaxed mb-8 min-h-[1.25rem]"></p>
+            <div id="clarity-html-explanation-root" class="space-y-4"></div>
         </section>
 
         <!-- Spacer for footer feel -->

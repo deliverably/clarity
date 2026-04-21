@@ -19,6 +19,8 @@ describe("schemas", () => {
         ok_percent: 100,
         error_percent: 0,
         top_issues: [],
+        avg_latency_ms: 42,
+        trends_30d: null,
       },
       links: [
         {
@@ -30,9 +32,13 @@ describe("schemas", () => {
           status_note: "ok",
           risk_level: "none",
           hops: 0,
+          latency_ms: 40,
         },
       ],
     });
     expect(o.links[0].hops).toBe(0);
+    expect(o.links[0].latency_ms).toBe(40);
+    expect(o.summary.avg_latency_ms).toBe(42);
+    expect(o.summary.trends_30d).toBeNull();
   });
 });

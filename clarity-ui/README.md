@@ -6,10 +6,10 @@ Static HTML mockups wired to the Clarity API. Open any page through a local HTTP
 
 | File | Feature |
 |------|---------|
-| `index.html` | **End-to-end workflow** (main page → saved designs → studio with all 9 modules; analyses start when you save) |
+| `index.html` | **End-to-end workflow** (main page → saved designs → studio with eight module tiles; keyword analysis runs automatically after Spam; analyses start when you save) |
 | `grammar.html` | Spelling & grammar (01) |
 | `link_analysis.html` | Link analysis (02) |
-| `spamtrigger_list.html` / `spamtrigger_visual.html` | Spam triggers (03) |
+| `spamtrigger_list.html` / `spamtrigger_visual.html` | Spam triggers + keyword suggestions (toggle on list page; no separate studio tile) (03) |
 | `multi-analysis.html` | Open/CTR, keywords, heatmap (04–06) |
 | `content_analysis.html` | Design analysis (07) |
 | `accessibilty.html` | Accessibility (08) |

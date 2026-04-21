@@ -289,7 +289,9 @@ For each check return:
 
 Also return:
 - "summary": { pass_count, fail_count, warning_count, overall_score: 0-100 }
-- "audio_content": Array of up to 3 short strings: suggested screen reader friendly alt/labels for key elements
+- "audio_content": Array of up to 20 short strings in logical reading order: what a screen reader would speak
+  (heading, landmark, link text, image alt text, body copy in sequence). Each string is one spoken segment.
+  Reflect compliance (e.g. call out missing alts or vague links where relevant). Omit empty strings.
 - "color_vision_flags": Array of zones that may be problematic for color-vision deficiency
   (each: { zone, deficiency_type, issue, suggestion }).
   deficiency_type MUST be exactly one of these lowercase strings:

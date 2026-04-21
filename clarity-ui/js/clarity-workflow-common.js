@@ -3,6 +3,18 @@
   global.CLARITY_WORKFLOW_BUNDLE_KEY = "clarityWorkflowBundle";
   global.CLARITY_DESIGNS_STORAGE_KEY = "clarity-workflow-designs-v1";
 
+  /**
+   * If raw content looks like EML (or MIME) with an embedded document, extract the first
+   * `<html>...</html>` block; otherwise return the string unchanged.
+   * Used by the workspace upload flow and the HTML analyzer manual input.
+   */
+  global.clarityParseEmlOrHtml = function (raw) {
+    var s = String(raw || "");
+    var htmlBlock = s.match(/<\s*html[\s\S]*<\/\s*html\s*>/i);
+    if (htmlBlock) return htmlBlock[0];
+    return s;
+  };
+
   global.clarityReadWorkflowBundle = function () {
     try {
       return JSON.parse(sessionStorage.getItem(global.CLARITY_WORKFLOW_BUNDLE_KEY) || "null");

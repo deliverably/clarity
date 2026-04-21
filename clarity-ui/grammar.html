@@ -171,7 +171,10 @@
 <section class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 p-6 shadow-sm space-y-3">
 <div class="flex flex-wrap items-center justify-between gap-3">
 <h2 class="text-sm font-bold text-on-surface font-headline">Email content</h2>
+<div class="flex flex-wrap items-center gap-2">
+<button id="clarity-run-grammar-workflow" type="button" class="hidden whitespace-nowrap bg-on-surface text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-primary transition-colors">Run spelling &amp; grammar</button>
 <span id="clarity-grammar-status" class="text-xs text-on-surface-variant"></span>
+</div>
 </div>
 <div data-clarity-manual-only class="space-y-3">
 <textarea id="clarity-email-content" rows="8" class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest p-4 text-sm font-body focus:ring-2 focus:ring-primary/30" placeholder="Paste email plain text or HTML body copy…">We was happy to recieve your inquiry. In order to proceed quickly, please reply ASAP!!!</textarea>
@@ -194,31 +197,32 @@
 </div>
 <div class="md:col-span-8 bg-surface-container-lowest p-6 rounded-xl shadow-sm">
 <h2 class="text-label-md font-semibold text-on-surface-variant uppercase tracking-[0.15em] mb-6">Tone Spectrum</h2>
-<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-<div class="flex flex-col items-center gap-3 p-3 rounded-lg bg-primary-fixed/30 border border-primary/10">
-<span class="material-symbols-outlined text-primary">campaign</span>
-<span class="text-xs font-bold text-primary">Confident</span>
-</div>
-<div class="flex flex-col items-center gap-3 p-3 rounded-lg hover:bg-surface-container transition-colors group">
-<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">bolt</span>
-<span class="text-xs font-medium text-on-surface-variant">Shocking</span>
-</div>
-<div class="flex flex-col items-center gap-3 p-3 rounded-lg hover:bg-surface-container transition-colors group">
-<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">sentiment_very_satisfied</span>
-<span class="text-xs font-medium text-on-surface-variant">Funny</span>
-</div>
-<div class="flex flex-col items-center gap-3 p-3 rounded-lg hover:bg-surface-container transition-colors group">
-<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">auto_awesome</span>
-<span class="text-xs font-medium text-on-surface-variant">Inspiring</span>
-</div>
-<div class="flex flex-col items-center gap-3 p-3 rounded-lg hover:bg-surface-container transition-colors group">
-<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">chat_bubble</span>
-<span class="text-xs font-medium text-on-surface-variant">Informal</span>
-</div>
-<div class="flex flex-col items-center gap-3 p-3 rounded-lg hover:bg-surface-container transition-colors group">
-<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">thumb_up</span>
-<span class="text-xs font-medium text-on-surface-variant">Admiring</span>
-</div>
+<p class="text-xs text-on-surface-variant mb-4">Choose the spectrum that best matches the detected tone. The match from analysis is highlighted; click another to compare.</p>
+<div id="clarity-tone-spectrum-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+<button type="button" data-clarity-tone-spectrum="Confident" class="clarity-tone-spectrum-tile flex flex-col items-center gap-3 p-3 rounded-lg border border-outline-variant/10 transition-colors text-left w-full">
+<span class="material-symbols-outlined icon">campaign</span>
+<span class="label text-xs font-medium">Confident</span>
+</button>
+<button type="button" data-clarity-tone-spectrum="Shocking" class="clarity-tone-spectrum-tile flex flex-col items-center gap-3 p-3 rounded-lg border border-outline-variant/10 transition-colors text-left w-full">
+<span class="material-symbols-outlined icon">bolt</span>
+<span class="label text-xs font-medium">Shocking</span>
+</button>
+<button type="button" data-clarity-tone-spectrum="Funny" class="clarity-tone-spectrum-tile flex flex-col items-center gap-3 p-3 rounded-lg border border-outline-variant/10 transition-colors text-left w-full">
+<span class="material-symbols-outlined icon">sentiment_very_satisfied</span>
+<span class="label text-xs font-medium">Funny</span>
+</button>
+<button type="button" data-clarity-tone-spectrum="Inspiring" class="clarity-tone-spectrum-tile flex flex-col items-center gap-3 p-3 rounded-lg border border-outline-variant/10 transition-colors text-left w-full">
+<span class="material-symbols-outlined icon">auto_awesome</span>
+<span class="label text-xs font-medium">Inspiring</span>
+</button>
+<button type="button" data-clarity-tone-spectrum="Informal" class="clarity-tone-spectrum-tile flex flex-col items-center gap-3 p-3 rounded-lg border border-outline-variant/10 transition-colors text-left w-full">
+<span class="material-symbols-outlined icon">chat_bubble</span>
+<span class="label text-xs font-medium">Informal</span>
+</button>
+<button type="button" data-clarity-tone-spectrum="Admiring" class="clarity-tone-spectrum-tile flex flex-col items-center gap-3 p-3 rounded-lg border border-outline-variant/10 transition-colors text-left w-full">
+<span class="material-symbols-outlined icon">thumb_up</span>
+<span class="label text-xs font-medium">Admiring</span>
+</button>
 </div>
 </div>
 </section>
@@ -229,7 +233,7 @@
 <div class="flex flex-wrap items-center gap-4">
 <div class="relative w-full max-w-sm">
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
-<input class="w-full pl-12 pr-4 py-3 bg-surface-container-highest border-none rounded-xl focus:ring-2 focus:ring-primary/40 text-sm font-body transition-all" placeholder="Search specific words..." type="text">
+<input id="clarity-issue-search" class="w-full pl-12 pr-4 py-3 bg-surface-container-highest border-none rounded-xl focus:ring-2 focus:ring-primary/40 text-sm font-body transition-all" placeholder="Search specific words..." type="search">
 </div>
 <div class="relative">
 <select id="clarity-issue-type-filter" class="appearance-none pl-6 pr-10 py-3 bg-surface-container-highest border-none rounded-xl focus:ring-2 focus:ring-primary/40 text-sm font-medium text-on-surface-variant cursor-pointer">
@@ -256,17 +260,15 @@
 <div id="clarity-issues-root" class="divide-y divide-outline-variant/5">
 <div class="px-6 py-10 text-center text-on-surface-variant text-sm">Run analysis to see issues here.</div>
 </div>
-<!-- Pagination/Status Footer -->
-<div class="p-6 bg-surface-container-low/50 flex justify-between items-center text-xs font-medium text-on-surface-variant">
-<div id="clarity-issues-footer">No analysis run yet.</div>
-<div class="flex items-center gap-2">
-<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-container-highest transition-colors">
+<!-- Pagination / status (filled by grammar-page.js) -->
+<div class="p-6 bg-surface-container-low/50 flex flex-wrap justify-between items-center gap-3 text-xs font-medium text-on-surface-variant">
+<span id="clarity-grammar-page-info">No analysis run yet.</span>
+<div id="clarity-grammar-pager" class="hidden items-center gap-1">
+<button type="button" id="clarity-grammar-pager-prev" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-container-highest transition-colors disabled:opacity-40 disabled:pointer-events-none" aria-label="Previous page">
 <span class="material-symbols-outlined text-lg">chevron_left</span>
 </button>
-<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary-container text-white font-bold">1</button>
-<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-container-highest transition-colors">2</button>
-<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-container-highest transition-colors">3</button>
-<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-container-highest transition-colors">
+<div id="clarity-grammar-pager-pages" class="flex items-center gap-1"></div>
+<button type="button" id="clarity-grammar-pager-next" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-container-highest transition-colors disabled:opacity-40 disabled:pointer-events-none" aria-label="Next page">
 <span class="material-symbols-outlined text-lg">chevron_right</span>
 </button>
 </div>
@@ -303,5 +305,5 @@
 <script>window.CLARITY_API_BASE = window.CLARITY_API_BASE || "http://localhost:3000";</script>
 <script src="js/clarity-workflow-common.js"></script>
 <script src="js/clarity-api.js"></script>
-<script src="js/grammar-page.js"></script>
+<script src="js/grammar-page.js" onerror="console.error('Failed to load grammar-page.js; use a local HTTP server, not file://')"></script>
 </body></html>
